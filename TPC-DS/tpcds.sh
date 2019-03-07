@@ -52,6 +52,10 @@ fi
 mkdir -p $_RESULT_DIR
 echo "Directory for storing result is：$_RESULT_DIR"
 
+
+echo "=========================================================="
+echo "start generate data..."
+echo "=========================================================="
 # 利用TPC-DS产生数据
 # unzip tpc-ds
 echo "unzip tpc-ds"
@@ -70,4 +74,6 @@ echo "dsdgen data"
 chmod +x $_TPCDS_DIR/tools/dsdgen
 $_TPCDS_DIR/tools/dsdgen -SCALE 1GB -DIR $_DATA_DIR
 
-
+echo "=========================================================="
+echo "Finish generate data..."
+echo "=========================================================="
