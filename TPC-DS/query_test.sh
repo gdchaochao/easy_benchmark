@@ -53,8 +53,8 @@ mkdir -p $_RESULT_DIR
 echo "Directory for storing result is：$_RESULT_DIR"
 
 
-hive -f $_WORKING_DIR/resource/queries/query1.sql > $_RESULT_DIR/out.txt 2>&1
-
-_OUTPUT=$("hive -f $_WORKING_DIR/resource/queries/query1.sql")
-echo $_OUTPUT | grep 'Time taken:'
+#hive -f $_WORKING_DIR/resource/queries/query1.sql > $_RESULT_DIR/out.txt 2>&1
+hive -f $_WORKING_DIR/resource/queries/query1.sql > $_RESULT_DIR/out.txt
+#_OUTPUT=$("hive -f $_WORKING_DIR/resource/queries/query1.sql")
+#echo $_OUTPUT | grep 'Time taken:'
 

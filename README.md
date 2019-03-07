@@ -18,7 +18,7 @@ cd ~
   
 #### Clone the code
 ```powershell
-git clone http://git.code.oa.com/tencent_cloud_mobile_tools/easy_benchmark.git
+git clone https://github.com/gdchaochao/easy_benchmark.git
 ```  
   
 #### Enter TPC-DS folder
