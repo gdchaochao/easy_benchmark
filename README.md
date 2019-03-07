@@ -10,6 +10,12 @@ Test benchmarks and tools include, but are not limited to, TPC-DS, Terasort.
 yum -y install gcc gcc-c++ expect
 ```  
   
+#### change user and open user namespace
+```powershell
+su hadoop
+cd ~
+```  
+  
 #### Clone the code
 ```powershell
 git clone http://git.code.oa.com/tencent_cloud_mobile_tools/easy_benchmark.git
