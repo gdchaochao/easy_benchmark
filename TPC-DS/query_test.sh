@@ -57,11 +57,12 @@ timestamp=$(date +%s)
 echo $timestamp
 
 echo "execute query1"
-echo "result in:$timestamp_query1"
-hive -f $_WORKING_DIR/resource/queries/query1.sql > $_RESULT_DIR/$timestamp_query1 2>&1
+result_file=$_RESULT_DIR/$timestamp'_query1'
+echo "result in:$result_file"
+hive -f $_WORKING_DIR/resource/queries/query1.sql > $result_file 2>&1
 
-time_spent=$(cat $timestamp_query1 | grep 'Time taken' | tr -cd "[0-9]\.")
-cpu_spent=$(cat $timestamp_query1 | grep 'MapReduce CPU Time Spent:')
+time_spent=$(cat $result_file | grep 'Time taken' | tr -cd "[0-9]\.")
+cpu_spent=$(cat $result_file | grep 'MapReduce CPU Time Spent:')
 cpu_spent=$(echo ${cpu_spent/seconds/\.} | tr -cd "[0-9]\.")
 echo $time_spent
 echo $cpu_spent
