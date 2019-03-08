@@ -12,8 +12,13 @@ do
         --help     Show this help
         --scale    The size of the generated data
         --data     Directory for storing data
-        --result   Directory for storing result"
+        --result   Directory for storing result
+        --sql      sql type, hive or spark-sql"
         exit
+        ;;
+    --sql)
+        _SQL_TYPE=$2
+        shift
         ;;
     --scale)
         _DATA_SCALE=$2
