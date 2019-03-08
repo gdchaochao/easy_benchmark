@@ -79,9 +79,9 @@ echo "=========================================================="
 
 total_time_spent=0
 #total_cpu_spent=0
-result_file=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
-echo "result in:$result_file"
-echo $_SQL_TYPE >> $result_file
+result_summary=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
+echo "result in:$result_summary"
+echo $_SQL_TYPE >> $result_summary
 
 files=$(ls $_WORKING_DIR/resource/queries-test)
 echo 'use spark-sql queries'
@@ -104,12 +104,12 @@ do
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
 #    total_cpu_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_cpu_spent'+'$cpu_spent')}')
 #    echo ${filename/.sql/}' '$time_spent' '$cpu_spent >> $_RESULT_DIR/$timestamp'_'$_SQL_TYPE
-    echo ${filename/.sql/}' '$time_spent >> $result_file
+    echo ${filename/.sql/}' '$time_spent >> $result_summary
 done
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="
 echo "total time:$total_time_spent"
 #echo "total cpu time:$total_cpu_spent"
-echo "total time:$total_time_spent" >> $result_file
+echo "total time:$total_time_spent" >> $result_summary
 #echo "total cpu time:$total_cpu_spent" >> $_RESULT_DIR/$timestamp'_'_SQL_TYPE

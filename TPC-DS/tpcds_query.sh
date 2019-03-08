@@ -78,9 +78,9 @@ echo "=========================================================="
 # start query
 
 total_time_spent=0
-result_file=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
-echo "result in:$result_file"
-echo $_SQL_TYPE >> $result_file
+result_summary=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
+echo "result in:$result_summary"
+echo $_SQL_TYPE >> $result_summary
 
 files=$(ls $_WORKING_DIR/resource/queries)
 if [ "$_SQL_TYPE" = "hive" ];then
@@ -97,10 +97,10 @@ do
     time_spent=${time_spent##*taken: }
     echo "cost time:$time_spent"
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
-    echo ${filename/.sql/}' '$time_spent >> $result_file
+    echo ${filename/.sql/}' '$time_spent >> $result_summary
 done
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="
 echo "total time:$total_time_spent"
-echo "total time:$total_time_spent" >> $result_file
+echo "total time:$total_time_spent" >> $result_summary
