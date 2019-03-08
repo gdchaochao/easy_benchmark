@@ -77,3 +77,30 @@ $_TPCDS_DIR/tools/dsdgen -SCALE 1GB -DIR $_DATA_DIR
 echo "=========================================================="
 echo "Finish generate data..."
 echo "=========================================================="
+
+
+echo "=========================================================="
+echo "start create table..."
+echo "=========================================================="
+
+# create table
+hive -f $_WORKING_DIR/resource/create_table.sql
+
+# load data to table
+echo "load data..."
+cd $_DATA_DIR/
+hive -f $_WORKING_DIR/resource/load_data.sql
+cd $_WORKING_DIR/
+
+echo "=========================================================="
+echo "Finish create table..."
+echo "=========================================================="
+
+echo "=========================================================="
+echo "start query..."
+echo "=========================================================="
+# start query
+nohup sh $_WORKING_DIR/tpcds_query.sh > query_log 2>&1 &
+echo "=========================================================="
+echo "Finish query..."
+echo "=========================================================="

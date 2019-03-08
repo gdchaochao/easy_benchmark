@@ -62,7 +62,7 @@ echo "Timestamp:$timestamp"
 total_time_spent=0
 total_cpu_spent=0
 
-files=$(ls $_WORKING_DIR/resource/queries-test)
+files=$(ls $_WORKING_DIR/resource/queries-hive)
 echo "result in:$_RESULT_DIR/$timestamp"
 for filename in $files
 do

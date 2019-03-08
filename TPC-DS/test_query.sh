@@ -54,44 +54,35 @@ echo "Directory for storing result is：$_RESULT_DIR"
 
 
 echo "=========================================================="
-echo "start generate data..."
+echo "start query..."
 echo "=========================================================="
-# 利用TPC-DS产生数据
-# unzip tpc-ds
-echo "unzip tpc-ds"
-_TPCDS_DIR=$_WORKING_DIR/tpcds
-echo $_TPCDS_DIR
-unzip -o ./resource/v2.10.1rc3.zip
-mv $_WORKING_DIR/v2.10.1rc3 $_WORKING_DIR/tpcds
-rm -rf $_WORKING_DIR/__MACOSX
+# start query
+timestamp=$(date +%s)
+echo "Timestamp:$timestamp"
+total_time_spent=0
+total_cpu_spent=0
 
-# make tpc-ds
-echo "make"
-cd $_TPCDS_DIR/tools
-make clean all
-
-echo "dsdgen data"
-chmod +x $_TPCDS_DIR/tools/dsdgen
-$_TPCDS_DIR/tools/dsdgen -SCALE 1GB -DIR $_DATA_DIR
-
+files=$(ls $_WORKING_DIR/resource/queries-test)
+echo "result in:$_RESULT_DIR/$timestamp"
+for filename in $files
+do
+#   echo $filename >> filename.txt
+   result_file=$_RESULT_DIR/$timestamp'_'${filename/.sql/}
+#   echo "result in:$result_file"
+   echo "Executing $filename now, please wait a moment"
+   hive -f $_WORKING_DIR/resource/queries/$filename > $result_file 2>&1
+   time_spent=$(cat $result_file | grep 'Time taken' | tr -cd "[0-9]\.")
+   cpu_spent=$(cat $result_file | grep 'MapReduce CPU Time Spent:')
+   cpu_spent=$(echo ${cpu_spent/seconds/\.} | tr -cd "[0-9]\.")
+   echo "cost time:$time_spent, cpu cost:$cpu_spent"
+   total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
+   total_cpu_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_cpu_spent'+'$cpu_spent')}')
+   echo ${filename/.sql/}' '$time_spent' '$cpu_spent >> $_RESULT_DIR/$timestamp
+done
 echo "=========================================================="
-echo "Finish generate data..."
+echo "Finish query..."
 echo "=========================================================="
-
-
-echo "=========================================================="
-echo "start create table..."
-echo "=========================================================="
-
-# create table
-hive -f $_WORKING_DIR/resource/create_table.sql
-
-# load data to table
-echo "load data..."
-cd $_DATA_DIR/
-hive -f $_WORKING_DIR/resource/load_data.sql
-cd $_WORKING_DIR/
-
-echo "=========================================================="
-echo "Finish create table..."
-echo "=========================================================="
+echo "total time:$total_time_spent"
+echo "total cpu time:$total_cpu_spent"
+echo "total time:$total_time_spent" >> $_RESULT_DIR/$timestamp
+echo "total cpu time:$total_cpu_spent" >> $_RESULT_DIR/$timestamp

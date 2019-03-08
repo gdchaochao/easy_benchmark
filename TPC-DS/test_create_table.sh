@@ -61,6 +61,7 @@ echo "=========================================================="
 hive -f $_WORKING_DIR/resource/create_table.sql 
 
 # load data to table
+echo "load data..."
 cd $_DATA_DIR/
 hive -f $_WORKING_DIR/resource/load_data.sql
 cd $_WORKING_DIR/
