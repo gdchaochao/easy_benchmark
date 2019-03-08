@@ -42,6 +42,11 @@ Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
 Warning: This scale factor is valid for QUALIFICATION ONLY
 ```  
   
+#### Run query in blackgroup
+```powershell
+nohup sh ./tpcds_query.sh > query_log 2>&1 &
+```  
+  
 #### Result like this:
 ```powershell
 total time:  2456s

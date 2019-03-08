@@ -54,37 +54,11 @@ echo "Directory for storing result is：$_RESULT_DIR"
 
 
 echo "=========================================================="
-echo "start generate data..."
-echo "=========================================================="
-# 利用TPC-DS产生数据
-# unzip tpc-ds
-echo "unzip tpc-ds"
-_TPCDS_DIR=$_WORKING_DIR/tpcds
-echo $_TPCDS_DIR
-unzip -o ./resource/v2.10.1rc3.zip
-mv $_WORKING_DIR/v2.10.1rc3 $_WORKING_DIR/tpcds
-rm -rf $_WORKING_DIR/__MACOSX
-
-# make tpc-ds
-echo "make"
-cd $_TPCDS_DIR/tools
-make clean all
-
-echo "dsdgen data"
-chmod +x $_TPCDS_DIR/tools/dsdgen
-$_TPCDS_DIR/tools/dsdgen -SCALE 1GB -DIR $_DATA_DIR
-
-echo "=========================================================="
-echo "Finish generate data..."
-echo "=========================================================="
-
-
-echo "=========================================================="
 echo "start create table..."
 echo "=========================================================="
 
 # create table
-hive -f $_WORKING_DIR/resource/create_table.sql
+hive -f $_WORKING_DIR/resource/create_table.sql 
 
 # load data to table
 hive -e "load data local inpath "$_DATA_DIR/web_site.dat" overwrite into table web_site;"
