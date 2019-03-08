@@ -40,7 +40,7 @@ do
   shift
 done
 
-if [ -z "_SQL_TYPE" ]; then
+if [ -z "$_SQL_TYPE" ]; then
     _SQL_TYPE='spark-sql'
 fi
 echo "SQL type is：$_SQL_TYPE "
@@ -71,9 +71,11 @@ timestamp=$(date +%s)
 echo "Timestamp:$timestamp"
 total_time_spent=0
 #total_cpu_spent=0
+result_file=$_RESULT_DIR/$timestamp'_'$_SQL_TYPE
 
 files=$(ls $_WORKING_DIR/resource/queries-test)
 echo "result in:$_RESULT_DIR/$timestamp"
+echo $_SQL_TYPE >> $result_file
 for filename in $files
 do
     result_file=$_RESULT_DIR/$timestamp'_'${filename/.sql/}
@@ -87,12 +89,12 @@ do
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
 #    total_cpu_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_cpu_spent'+'$cpu_spent')}')
 #    echo ${filename/.sql/}' '$time_spent' '$cpu_spent >> $_RESULT_DIR/$timestamp'_'$_SQL_TYPE
-    echo ${filename/.sql/}' '$time_spent >> $_RESULT_DIR/$timestamp'_'$_SQL_TYPE
+    echo ${filename/.sql/}' '$time_spent >> $result_file
 done
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="
 echo "total time:$total_time_spent"
 #echo "total cpu time:$total_cpu_spent"
-echo "total time:$total_time_spent" >> $_RESULT_DIR/$timestamp
+echo "total time:$total_time_spent" >> $result_file
 #echo "total cpu time:$total_cpu_spent" >> $_RESULT_DIR/$timestamp'_'_SQL_TYPE
