@@ -83,7 +83,7 @@ result_file=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
 echo "result in:$result_file"
 echo $_SQL_TYPE >> $result_file
 
-files=$(ls $_WORKING_DIR/resource/queries)
+files=$(ls $_WORKING_DIR/resource/queries-test)
 echo 'use spark-sql queries'
 if [ "$_SQL_TYPE" = "hive" ];then
     echo 'oh,use hive queries'
@@ -94,7 +94,9 @@ do
     result_file=$_RESULT_DIR/$_TIMESTAMP'_'${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
     $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename > $result_file 2>&1
-    time_spent=$(cat $result_file | grep 'Time taken' | tr -cd "[0-9]\.")
+    time_spent=$(cat $result_file | grep 'Time taken')
+    time_spent=${time_spent% seconds*}
+    time_spent=${time_spent##*taken: }
 #    cpu_spent=$(cat $result_file | grep 'MapReduce CPU Time Spent:')
 #    cpu_spent=$(echo ${cpu_spent/seconds/\.} | tr -cd "[0-9]\.")
 #    echo "cost time:$time_spent, cpu cost:$cpu_spent"

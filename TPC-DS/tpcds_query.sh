@@ -92,7 +92,9 @@ do
     result_file=$_RESULT_DIR/$_TIMESTAMP'_'${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
     $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename > $result_file 2>&1
-    time_spent=$(cat $result_file | grep 'Time taken' | tr -cd "[0-9]\.")
+    time_spent=$(cat $result_file | grep 'Time taken')
+    time_spent=${time_spent% seconds*}
+    time_spent=${time_spent##*taken: }
     echo "cost time:$time_spent"
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
     echo ${filename/.sql/}' '$time_spent >> $result_file
