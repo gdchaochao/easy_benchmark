@@ -110,7 +110,8 @@ echo "=========================================================="
 echo "start query..."
 echo "=========================================================="
 # start query
-nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --scale $_DATA_SCALE --data $_DATA_DIR --result _RESULT_DIR > query_log 2>&1 &
+_TIMESTAMP=$(date +%s)
+nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --scale $_DATA_SCALE --data $_DATA_DIR --result _RESULT_DIR --time $_TIMESTAMP > $_RESULT_DIR/$_TIMESTAMP'_'log 2>&1 &
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="

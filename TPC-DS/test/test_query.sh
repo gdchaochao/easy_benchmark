@@ -32,6 +32,10 @@ do
         _RESULT_DIR=$2
         shift
         ;;
+    --time)
+        _TIMESTAMP=$2
+        shift
+        ;;
     *)
         echo "$1 is not an option"
         exit
@@ -62,16 +66,20 @@ fi
 mkdir -p $_RESULT_DIR
 echo "Directory for storing result is：$_RESULT_DIR"
 
+if [ -z "$_TIMESTAMP" ]; then
+    _TIMESTAMP=$(date +%s)
+fi
+echo "Timestamp:$_TIMESTAMP"
+
 
 echo "=========================================================="
 echo "start query..."
 echo "=========================================================="
 # start query
-timestamp=$(date +%s)
-echo "Timestamp:$timestamp"
+
 total_time_spent=0
 #total_cpu_spent=0
-result_file=$_RESULT_DIR/$timestamp'_'$_SQL_TYPE
+result_file=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
 echo "result in:$result_file"
 echo $_SQL_TYPE >> $result_file
 
@@ -83,7 +91,7 @@ if [ "$_SQL_TYPE" = "hive" ];then
 fi
 for filename in $files
 do
-    result_file=$_RESULT_DIR/$timestamp'_'${filename/.sql/}
+    result_file=$_RESULT_DIR/$_TIMESTAMP'_'${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
     $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken' | tr -cd "[0-9]\.")
