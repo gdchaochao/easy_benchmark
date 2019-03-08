@@ -72,10 +72,15 @@ echo "Timestamp:$timestamp"
 total_time_spent=0
 #total_cpu_spent=0
 result_file=$_RESULT_DIR/$timestamp'_'$_SQL_TYPE
-
-files=$(ls $_WORKING_DIR/resource/queries-test)
-echo "result in:$_RESULT_DIR/$timestamp"
+echo "result in:$result_file"
 echo $_SQL_TYPE >> $result_file
+
+files=$(ls $_WORKING_DIR/resource/queries)
+echo 'use spark-sql queries'
+if [ "$_SQL_TYPE" = "hive" ];then
+    echo 'oh,use hive queries'
+    files=$(ls $_WORKING_DIR/resource/queries-hive)
+fi
 for filename in $files
 do
     result_file=$_RESULT_DIR/$timestamp'_'${filename/.sql/}

@@ -12,8 +12,13 @@ do
         --help     Show this help
         --scale    The size of the generated data
         --data     Directory for storing data
-        --result   Directory for storing result"
+        --result   Directory for storing result
+        --sql      sql type, hive or spark-sql"
         exit
+        ;;
+    --sql)
+        _SQL_TYPE=$2
+        shift
         ;;
     --scale)
         _DATA_SCALE=$2
@@ -34,6 +39,11 @@ do
   esac
   shift
 done
+
+if [ -z "$_SQL_TYPE" ]; then
+    _SQL_TYPE='spark-sql'
+fi
+echo "SQL type is：$_SQL_TYPE "
 
 if [ -z "$_DATA_SCALE" ]; then
     _DATA_SCALE=10
@@ -100,7 +110,7 @@ echo "=========================================================="
 echo "start query..."
 echo "=========================================================="
 # start query
-nohup sh $_WORKING_DIR/tpcds_query.sh > query_log 2>&1 &
+nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --scale $_DATA_SCALE --data $_DATA_DIR --result _RESULT_DIR > query_log 2>&1 &
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="

@@ -12,8 +12,13 @@ do
         --help     Show this help
         --scale    The size of the generated data
         --data     Directory for storing data
-        --result   Directory for storing result"
+        --result   Directory for storing result
+        --sql      sql type, hive or spark-sql"
         exit
+        ;;
+    --sql)
+        _SQL_TYPE=$2
+        shift
         ;;
     --scale)
         _DATA_SCALE=$2
@@ -34,6 +39,11 @@ do
   esac
   shift
 done
+
+if [ -z "$_SQL_TYPE" ]; then
+    _SQL_TYPE='spark-sql'
+fi
+echo "SQL type is：$_SQL_TYPE "
 
 if [ -z "$_DATA_SCALE" ]; then
     _DATA_SCALE=10
