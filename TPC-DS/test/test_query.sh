@@ -86,7 +86,7 @@ echo $_SQL_TYPE >> $result_summary
 files=$(ls $_WORKING_DIR/resource/queries-test)
 if [ "$_SQL_TYPE" = "hive" ];then
     echo 'oh,use hive queries'
-    files=$(ls $_WORKING_DIR/resource/queries-test)
+    files=$(ls $_WORKING_DIR/resource/queries)
 fi
 for filename in $files
 do
