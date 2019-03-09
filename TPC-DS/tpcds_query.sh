@@ -92,7 +92,7 @@ for filename in $files
 do
     result_file=$_RESULT_DIR/$_TIMESTAMP/${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
-    $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename > $result_file 2>&1
+    $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE'-prepare.sql' > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
     if [ -n "$time_spent" ]; then
         time_spent=${time_spent% seconds*}
