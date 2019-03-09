@@ -1,5 +1,5 @@
 select c_customer_id as customer_id 
-    ,c_last_name || ', ' || c_first_name as customername 
+    , concat_ws(', ', c_last_name, c_first_name) as customername
 from customer 
     ,customer_address 
     ,customer_demographics 

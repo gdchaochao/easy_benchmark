@@ -78,7 +78,8 @@ echo "=========================================================="
 # start query
 
 total_time_spent=0
-result_summary=$_RESULT_DIR/$_TIMESTAMP'_'$_SQL_TYPE
+result_summary=$_RESULT_DIR/$_TIMESTAMP/result_$_SQL_TYPE
+mkdir -p $_RESULT_DIR/$_TIMESTAMP
 echo "result in:$result_summary"
 echo $_SQL_TYPE >> $result_summary
 
@@ -89,12 +90,14 @@ if [ "$_SQL_TYPE" = "hive" ];then
 fi
 for filename in $files
 do
-    result_file=$_RESULT_DIR/$_TIMESTAMP'_'${filename/.sql/}
+    result_file=$_RESULT_DIR/$_TIMESTAMP/${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
     $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
-    time_spent=${time_spent% seconds*}
-    time_spent=${time_spent##*taken: }
+    if [ -n "$time_spent" ]; then
+        time_spent=${time_spent% seconds*}
+        time_spent=${time_spent##*taken: }
+    fi
     echo "cost time:$time_spent"
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
     echo ${filename/.sql/}' '$time_spent >> $result_summary
