@@ -111,7 +111,8 @@ echo "start query..."
 echo "=========================================================="
 # start query
 _TIMESTAMP=$(date +%s)
-nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --scale $_DATA_SCALE --data $_DATA_DIR --result $_RESULT_DIR --time $_TIMESTAMP > $_RESULT_DIR/$_TIMESTAMP'_'log 2>&1 &
+mkdir -p $_RESULT_DIR/$_TIMESTAMP
+nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --result $_RESULT_DIR --time $_TIMESTAMP > $_RESULT_DIR/$_TIMESTAMP/$_TIMESTAMP'_'log 2>&1 &
 echo "=========================================================="
 echo "Query in Backstage, please wait and check result in $_RESULT_DIR..."
 echo "=========================================================="
