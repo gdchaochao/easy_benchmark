@@ -5,34 +5,34 @@ Solve the various pits of big data benchmarks, automate tests and generate resul
 Test benchmarks and tools include, but are not limited to, TPC-DS, Terasort.
 
 # TPC-DS
-#### Install build environment
+### Install build environment
 ```powershell
 yum -y install gcc gcc-c++ expect
 ```  
   
-#### change user and open user namespace
+### Change to hadoop user 
 ```powershell
 su hadoop
 cd ~
 ```  
   
-#### Clone the code
+### Clone the code
 ```powershell
 git clone https://github.com/gdchaochao/easy_benchmark.git
 ```  
   
-#### Enter TPC-DS folder
+### Enter TPC-DS folder
 ```powershell
 cd ./easy_benchmark/TPC-DS
 ```  
   
-#### Run TPC-DS test
+### Generate data
 ```powershell
 sh ./tpcds.sh --scale 10
 ```
 You can also specify data folder and result folder
 ```powershell
-sh ./tpcds.sh --scale 10 --data /data/tpcds/data --result /data/tpcds/result
+sh ./tpcds.sh --scale 10 --data ~/tpcds/data --result ~/tpcds/result
 ```  
   
 If you see this information, please wait a moment.
@@ -42,12 +42,18 @@ Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
 Warning: This scale factor is valid for QUALIFICATION ONLY
 ```  
   
-#### Run query in blackgroup
+### Run query in blackgroup
 ```powershell
-nohup sh ./tpcds_query.sh > query_log 2>&1 &
+nohup sh ./tpcds_query.sh --sql spark-sql --result ~/tpcds/result > query_log 2>&1 &
 ```  
   
-#### Result like this:
+### Quick Start( Generate data + Run query)
+If you want to generate data and then run tpc-ds queries, just run this command:
+```powershell
+nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > query_log 2>&1 &
+```
+
+### Result like this:
 ```powershell
 total time:  2456s
 query2:      126s
