@@ -1,30 +1,30 @@
 解决大数据基准测试的各种坑，自动执行测试并生成结果。  
 测试基准和工具包括但不仅限于TPC-DS，Terasort.  
   
-Solve the various pits of big data benchmarks, automate tests and generate results.  
-Test benchmarks and tools include, but are not limited to, TPC-DS, Terasort.
+Solve the various bugs of big data benchmarks, automate run benchmarks and generate results.  
+Benchmarks include, but are not limited to, TPC-DS, Terasort.
 
-# TPC-DS
-### Install build environment
+# TPC-DSB
+### Prepare
+1、Start HDFS, Yarn, Spark in the cluster.  
+
+2、Install build environment
 ```powershell
 yum -y install gcc gcc-c++ expect
 ```  
   
-### Change to hadoop user 
+3、Use hadoop account
 ```powershell
 su hadoop
 cd ~
 ```  
   
-### Clone the code
+4、Clone the code and Enter TPC-DS folder
 ```powershell
 git clone https://github.com/gdchaochao/easy_benchmark.git
-```  
-  
-### Enter TPC-DS folder
-```powershell
 cd ./easy_benchmark/TPC-DS
 ```  
+  
   
 ### Generate data
 ```powershell
@@ -42,13 +42,13 @@ Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
 Warning: This scale factor is valid for QUALIFICATION ONLY
 ```  
   
-### Run query in blackgroup
+### Run queries in Background
 ```powershell
 nohup sh ./tpcds_query.sh --sql spark-sql --result ~/tpcds/result > query_log 2>&1 &
 ```  
   
-### Quick Start( Generate data + Run query)
-If you want to generate data and then run tpc-ds queries, just run this command:
+### Quick Start( Generate data + Run queries)
+If you want to perform a query immediately after generating the data, just execute the following command:
 ```powershell
 nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > query_log 2>&1 &
 ```
