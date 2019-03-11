@@ -4,7 +4,7 @@
 Solve the various bugs of big data benchmarks, automate run benchmarks and generate results.  
 Benchmarks include, but are not limited to, TPC-DS, Terasort.
 
-# TPC-DSB
+# TPC-DS
 ### Prepare
 1、Start hadoop, HDFS, Yarn, Spark in the cluster.  
 
@@ -52,7 +52,7 @@ Generate data and create tables
 ```
 sh ./tpcds_gen.sh --scale 10
 ```
-You can also specify data folder and result folder
+You can also specify data folder
 ```
 sh ./tpcds_gen.sh --scale 10 --data ~/tpcds/data
 ```  

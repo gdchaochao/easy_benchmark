@@ -1,26 +1,55 @@
 # 自动化执行TPC-DS测试
 #### Install build environment
-```powershell
+### Prepare
+1、Start hadoop, HDFS, Yarn, Spark in the cluster.  
+
+2、Install build environment
+```
 yum -y install gcc gcc-c++ expect
 ```  
   
-#### Clone the code
-```powershell
-git clone http://git.code.oa.com/tencent_cloud_mobile_tools/easy_benchmark.git
+3、Use hadoop account
+```
+su hadoop
+cd ~
 ```  
   
-#### Enter TPC-DS folder
-```powershell
+4、Clone the code and Enter TPC-DS folder
+```
+git clone https://github.com/gdchaochao/easy_benchmark.git
 cd ./easy_benchmark/TPC-DS
 ```  
   
-#### Run TPC-DS test
-```powershell
-sh ./tpcds.sh --scale 10
+### Quick Start(Generate data + Run queries)
+If you want to perform a query immediately after generating the data, just execute the following command:
 ```
-You can also specify data folder and result folder
-```powershell
-sh ./tpcds.sh --scale 10 --data /data/tpcds/data --result /data/tpcds/result
+nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > query_log 2>&1 &
+```
+
+### Result like this:
+```
+...
+Executing query98.sql now, please wait a moment
+cost time:12.391
+Executing query99.sql now, please wait a moment
+cost time:7.557
+Executing query9.sql now, please wait a moment
+cost time:13.808
+==========================================================
+Finish query...
+==========================================================
+total time:1556.53  
+
+```  
+  
+### Generate data
+Generate data and create tables
+```
+sh ./tpcds_gen.sh --scale 10
+```
+You can also specify data folder
+```
+sh ./tpcds_gen.sh --scale 10 --data ~/tpcds/data
 ```  
   
 If you see this information, please wait a moment.
@@ -30,12 +59,10 @@ Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
 Warning: This scale factor is valid for QUALIFICATION ONLY
 ```  
   
-#### Result like this:
-```powershell
-total time:  2456s
-query2:      126s
-query3:      231s
-...
+### Run queries
+Run queries in Background
+```
+nohup sh ./tpcds_query.sh --sql spark-sql --result ~/tpcds/result > query_log 2>&1 &
 ```  
 
 # 手工执行TPC-DS测试
