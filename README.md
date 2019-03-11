@@ -26,13 +26,13 @@ cd ./easy_benchmark/TPC-DS
 ```  
   
   
-### Generate data
+### Generate data and create tables
 ```powershell
-sh ./tpcds.sh --scale 10
+sh ./tpcds_gen.sh --scale 10
 ```
 You can also specify data folder and result folder
 ```powershell
-sh ./tpcds.sh --scale 10 --data ~/tpcds/data --result ~/tpcds/result
+sh ./tpcds_gen.sh --scale 10 --data ~/tpcds/data
 ```  
   
 If you see this information, please wait a moment.
@@ -55,10 +55,18 @@ nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tp
 
 ### Result like this:
 ```powershell
-total time:  2456s
-query2:      126s
-query3:      231s
 ...
+Executing query98.sql now, please wait a moment
+cost time:12.391
+Executing query99.sql now, please wait a moment
+cost time:7.557
+Executing query9.sql now, please wait a moment
+cost time:13.808
+==========================================================
+Finish query...
+==========================================================
+total time:1556.53  
+
 ```  
   
 ## Terasort
