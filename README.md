@@ -43,18 +43,18 @@ Warning: This scale factor is valid for QUALIFICATION ONLY
 ```  
   
 ### Run queries in Background
-```powershell
+```
 nohup sh ./tpcds_query.sh --sql spark-sql --result ~/tpcds/result > query_log 2>&1 &
 ```  
   
 ### Quick Start( Generate data + Run queries)
 If you want to perform a query immediately after generating the data, just execute the following command:
-```powershell
+```
 nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > query_log 2>&1 &
 ```
 
 ### Result like this:
-```powershell
+```
 ...
 Executing query98.sql now, please wait a moment
 cost time:12.391
