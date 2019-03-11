@@ -9,11 +9,24 @@ do
   case "$1" in
     --help)
         echo "
-        --help     Show this help
-        --scale    The size of the generated data
-        --data     Directory for storing data
-        --result   Directory for storing result
-        --sql      sql type, hive or spark-sql"
+        --help                      Show this help
+        --scale                     The size of the generated data, (Default: 10G)
+        --data                      Directory for storing data
+        --result                    Directory for storing result
+        --sql                       sql type, hive or spark-sql
+
+        spark-sql only:
+        --master                    spark://host:port, mesos://host:port, yarn, or local(Default: yarn).
+        --driver-memory MEM         Memory for driver (e.g. 1000M, 2G) (Default: 1024M).
+        --executor-memory MEM       Memory per executor (e.g. 1000M, 2G) (Default: 1G).
+
+        Spark standalone and YARN only:
+        --executor-cores NUM        Number of cores per executor. (Default: 1 in YARN mode, or all available cores on the worker in standalone mode)
+
+        YARN-only:
+        --driver-cores NUM          Number of cores used by the driver, only in cluster mode(Default: 1).
+        --num-executors NUM         Number of executors to launch (Default: 2). If dynamic allocation is enabled, the initial number of  executors will be at least NUM.
+        "
         exit
         ;;
     --sql)
@@ -26,6 +39,26 @@ do
         ;;
     --time)
         _TIMESTAMP=$2
+        shift
+        ;;
+    --master)
+        MASTER_URL=$2
+        shift
+        ;;
+    --num-executors)
+        EXECUTORS_NUM=$2
+        shift
+        ;;
+    --executor-cores)
+        EXECUTOR_CORES=$2
+        shift
+        ;;
+    --executor-memory)
+        EXECUTOR_MEMORY=$2
+        shift
+        ;;
+    --driver-memory)
+        DRIVER_MEMORY=$2
         shift
         ;;
     *)
@@ -52,6 +85,26 @@ if [ -z "$_TIMESTAMP" ]; then
 fi
 echo "Timestamp:$_TIMESTAMP"
 
+# spark 相关的参数
+spark_param_str=""
+if [ "$_SQL_TYPE" = "spark-sql" ];then
+    if [ -n "$MASTER_URL" ]; then
+        spark_param_str=$spark_param_str" --master "$MASTER_URL
+    fi
+    if [ -n "$EXECUTORS_NUM" ]; then
+        spark_param_str=$spark_param_str" --num-executors "$EXECUTORS_NUM
+    fi
+    if [ -n "$EXECUTOR_CORES" ]; then
+        spark_param_str=$spark_param_str" --executor-cores "$EXECUTOR_CORES
+    fi
+    if [ -n "$EXECUTOR_MEMORY" ]; then
+        spark_param_str=$spark_param_str" --executor-memory "$EXECUTOR_MEMORY
+    fi
+    if [ -n "$DRIVER_MEMORY" ]; then
+        spark_param_str=$spark_param_str" --driver-memory "$DRIVER_MEMORY
+    fi
+    echo "spark param is:$spark_param_str"
+fi
 
 echo "=========================================================="
 echo "start query..."
@@ -73,7 +126,9 @@ for filename in $files
 do
     result_file=$_RESULT_DIR/$_TIMESTAMP/${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
-    $_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE'-prepare.sql' > $result_file 2>&1
+    cmd="$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE'-prepare.sql' $spark_param_str"
+    echo $cmd
+    $cmd > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
     if [ -n "$time_spent" ]; then
         time_spent=${time_spent% seconds*}
