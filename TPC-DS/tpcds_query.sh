@@ -112,7 +112,7 @@ echo "=========================================================="
 # start query
 
 total_time_spent=0
-result_summary=$_RESULT_DIR/$_TIMESTAMP/result_$_SQL_TYPE
+result_summary=$_RESULT_DIR/$_TIMESTAMP/summary_$_SQL_TYPE
 mkdir -p $_RESULT_DIR/$_TIMESTAMP
 echo "result in:$result_summary"
 echo $_SQL_TYPE >> $result_summary

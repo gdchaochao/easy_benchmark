@@ -112,7 +112,7 @@ echo "=========================================================="
 # start query
 _TIMESTAMP=$(date +%s)
 mkdir -p $_RESULT_DIR/$_TIMESTAMP
-nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --result $_RESULT_DIR --time $_TIMESTAMP > $_RESULT_DIR/$_TIMESTAMP/$_TIMESTAMP'_'log 2>&1 &
+nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --result $_RESULT_DIR --time $_TIMESTAMP > $_RESULT_DIR/$_TIMESTAMP/result 2>&1 &
 echo "=========================================================="
-echo "Run queries in Background, please wait and check result in $_RESULT_DIR/$_TIMESTAMP..."
+echo "Run queries in Background, please wait and check result in $_RESULT_DIR/$_TIMESTAMP/result..."
 echo "=========================================================="
