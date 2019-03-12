@@ -28,7 +28,7 @@ cd ./easy_benchmark/TPC-DS
 ### Generate data
 Generate data and create tables, "--scale" indicates how big the generated data is (GB).
 ```
-sh ./tpcds_gen.sh --scale 10 --data ~/data
+sh ./tpcds_gen.sh --scale 10 --data ~/tpcds/data
 ```
   
 If you see this information, please wait a moment.
@@ -41,14 +41,14 @@ Warning: This scale factor is valid for QUALIFICATION ONLY
 ### Run queries
 Run spark-sql queries in Background, please wait.
 ```
-sh ./tpcds.sh --sql spark-sql --result ./result
+sh ./tpcds.sh --sql spark-sql --result ~/tpcds/result
 ```  
 The result will be in "--result" you set or default in "./result"  
 For more information, use "tpcds.sh --help"   
   
 If you want to run queries in *hive*, just set "--sql hive" like this:
 ```
-sh ./tpcds.sh --sql hive --result ./result
+sh ./tpcds.sh --sql hive --result ~/tpcds/result
 ```  
 
   
