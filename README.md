@@ -28,9 +28,9 @@ cd ./easy_benchmark/TPC-DS
 ### Quick Start(Generate data + Run queries)
 If you want to perform a query immediately after generating the data, just execute the following command:
 ```
-nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > query_log 2>&1 &
+nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > ~/tpcds/result/query_log 2>&1 &
 ```
-
+The result will be in "--result" you set or default in "./result"  
 ### Result like this:
 ```
 ...
@@ -69,7 +69,7 @@ Run queries in Background
 ```
 nohup sh ./tpcds_query.sh --sql spark-sql --result ~/tpcds/result > query_log 2>&1 &
 ```  
-  
+The result will be in "--result" you set or default in "./result"    
   
 ## Terasort
 TODO
