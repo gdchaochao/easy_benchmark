@@ -25,12 +25,28 @@ git clone https://github.com/gdchaochao/easy_benchmark.git
 cd ./easy_benchmark/TPC-DS
 ```  
   
-### Quick Start(Generate data + Run queries)
-If you want to perform a query immediately after generating the data, just execute the following command:
+### Generate data
+Generate data and create tables, "--scale" indicates how big the generated data is (GB).
 ```
-nohup sh ./tpcds.sh --sql spark-sql --scale 10 --data ~/tpcds/data --result ~/tpcds/result > ~/tpcds/result/query_log 2>&1 &
+sh ./tpcds_gen.sh --scale 10
 ```
-The result will be in "--result" you set or default in "./result"  
+  
+If you see this information, please wait a moment.
+```powershell
+dsdgen Population Generator (Version 2.10.0)
+Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
+Warning: This scale factor is valid for QUALIFICATION ONLY
+```  
+  
+### Run queries
+Run queries in Background
+```
+nohup sh ./tpcds_query.sh --sql spark-sql --result ./result > query_log 2>&1 &
+```  
+The result will be in "--result" you set or default in "./result"   
+If you want to run hive queries, just set "--sql hive"
+For more information, use "tpcds_query.sh --help"
+  
 ### Result like this:
 ```
 ...
@@ -46,30 +62,5 @@ Finish query...
 total time:1556.53  
 
 ```  
-  
-### Generate data
-Generate data and create tables
-```
-sh ./tpcds_gen.sh --scale 10
-```
-You can also specify data folder
-```
-sh ./tpcds_gen.sh --scale 10 --data ~/tpcds/data
-```  
-  
-If you see this information, please wait a moment.
-```powershell
-dsdgen Population Generator (Version 2.10.0)
-Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
-Warning: This scale factor is valid for QUALIFICATION ONLY
-```  
-  
-### Run queries
-Run queries in Background
-```
-nohup sh ./tpcds_query.sh --sql spark-sql --result ~/tpcds/result > query_log 2>&1 &
-```  
-The result will be in "--result" you set or default in "./result"    
-  
 ## Terasort
 TODO
