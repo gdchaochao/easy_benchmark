@@ -45,6 +45,7 @@ sh ./tpcds.sh --sql spark-sql --result ./result
 ```  
 The result will be in "--result" you set or default in "./result"  
 For more information, use "tpcds.sh --help"   
+  
 If you want to run queries in *hive*, just set "--sql hive" like this:
 ```
 sh ./tpcds.sh --sql hive --result ./result
