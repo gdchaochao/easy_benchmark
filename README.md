@@ -44,7 +44,7 @@ Run queries in Background
 nohup sh ./tpcds_query.sh --sql spark-sql --result ./result > query_log 2>&1 &
 ```  
 The result will be in "--result" you set or default in "./result"   
-If you want to run hive queries, just set "--sql hive"
+If you want to run hive queries, just set "--sql hive"  
 For more information, use "tpcds_query.sh --help"
   
 ### Result like this:
