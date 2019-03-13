@@ -14,6 +14,7 @@ do
         --data                      Directory for storing data
         --result                    Directory for storing result
         --sql                       sql type, hive or spark-sql
+        --report                    report to yunyu
 
         spark-sql only:
         --master                    spark://host:port, mesos://host:port, yarn, or local(Default: yarn).

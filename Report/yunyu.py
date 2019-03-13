@@ -284,7 +284,16 @@ def post_tpc_ds_result(sql_type, scale, result, core_num, memory, spark_version,
                      benchmark_type, description, task_id)
 
 
-if __name__ == '__main__':
+print sys.argv[1]
+print sys.argv[2]
+print sys.argv[3]
+print sys.argv[4]
+print sys.argv[5]
+print token
+post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], 64, 256, '2.3.2', '2.7.3', '2.1.0', sys.argv[5])
+
+
+# if __name__ == '__main__':
     # test_name = 'host_test_qzzhu'
     # tool_name = 'test_qzzhu'
     # cost = '{}'
@@ -315,7 +324,7 @@ if __name__ == '__main__':
     #                  avg_time, min_time, max_time, median_time, std_time,
     #                  avg_through_put, min_through_put, max_through_put, median_through_put, std_through_put,
     #                  benchmark_type, description, task_id)
-    print token
+    # print token
     # post_tpc_ds_result('spark-sql', 10, {"total": 1520.34, "sql1": 13.2, "sql2": 23.4}, 64, 256, '2.3.2', '2.7.3', '2.1.0', 1552396159589)
     # sys.argv[1]
-    post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], 64, 256, '2.3.2', '2.7.3', '2.1.0', sys.argv[5])
+    # post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], 64, 256, '2.3.2', '2.7.3', '2.1.0', sys.argv[5])
