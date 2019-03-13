@@ -159,5 +159,5 @@ result_yunyu=$result_yunyu"\"total\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py \"$REPORT_TOKEN\" $_SQL_TYPE 10 $result_yunyu $_TIMESTAMP
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE 10 $result_yunyu $_TIMESTAMP
 fi
