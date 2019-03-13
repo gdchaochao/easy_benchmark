@@ -6,7 +6,7 @@ Created on 2019/3/13
 import json, urllib2, datetime, hashlib, urllib, sys
 
 host = "https://yunyu.cloud.tencent.com/cloud_perf_db"
-token = sys.argv[1]
+token = "Token " + sys.argv[1]
 
 testcase_data = """
                 {
