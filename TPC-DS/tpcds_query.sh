@@ -126,9 +126,9 @@ for filename in $files
 do
     result_file=$_RESULT_DIR/$_TIMESTAMP/${filename/.sql/}
     echo "Executing $filename now, please wait a moment"
-    cmd=""\$"SPARK_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+    cmd="$SPARK_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     if [ "$_SQL_TYPE" = "hive" ];then
-        cmd=""\$"HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+        cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     fi
     echo $cmd
     $cmd > $result_file 2>&1
