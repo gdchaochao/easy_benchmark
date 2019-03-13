@@ -61,6 +61,10 @@ do
         DRIVER_MEMORY=$2
         shift
         ;;
+    --report)
+        REPORT_TOKEN=$2
+        shift
+        ;;
     *)
         echo "$1 is not an option"
         exit
@@ -84,6 +88,8 @@ if [ -z "$_TIMESTAMP" ]; then
     _TIMESTAMP=$(date +%s)
 fi
 echo "Timestamp:$_TIMESTAMP"
+
+echo "Token:$REPORT_TOKEN"
 
 # spark 相关的参数
 spark_param_str=""
@@ -150,3 +156,7 @@ echo "total time:$total_time_spent"
 echo "total time:$total_time_spent" >> $result_summary
 result_yunyu=$result_yunyu"\"total\":$total_time_spent}"
 echo $result_yunyu
+
+if [ -n "$REPORT_TOKEN" ]; then
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE 10 $result_yunyu $_TIMESTAMP
+fi
