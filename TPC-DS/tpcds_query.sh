@@ -130,7 +130,7 @@ do
     if [ "$_SQL_TYPE" = "hive" ];then
         cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     fi
-    echo $cmd
+#    echo $cmd
     $cmd > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
     if [ -n "$time_spent" ]; then
