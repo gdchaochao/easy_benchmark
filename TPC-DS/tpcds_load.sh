@@ -68,32 +68,6 @@ echo "Directory for storing result is：$_RESULT_DIR"
 
 
 echo "=========================================================="
-echo "start generate data..."
-echo "=========================================================="
-# 利用TPC-DS产生数据
-# unzip tpc-ds
-echo "unzip tpc-ds"
-_TPCDS_DIR=$_WORKING_DIR/tpcds
-echo $_TPCDS_DIR
-unzip -o ./resource/v2.10.1rc3.zip
-mv $_WORKING_DIR/v2.10.1rc3 $_WORKING_DIR/tpcds
-rm -rf $_WORKING_DIR/__MACOSX
-
-# make tpc-ds
-echo "make"
-cd $_TPCDS_DIR/tools
-make clean all
-
-echo "dsdgen data"
-chmod +x $_TPCDS_DIR/tools/dsdgen
-$_TPCDS_DIR/tools/dsdgen -SCALE 1GB -DIR $_DATA_DIR
-
-echo "=========================================================="
-echo "Finish generate data..."
-echo "=========================================================="
-
-
-echo "=========================================================="
 echo "start create table and load data..."
 echo "=========================================================="
 
@@ -103,9 +77,9 @@ $HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/create_table.sql
 # load data to table
 echo "load data..."
 _TIMESTAMP=$(date +%s)
-mkdir -p $_DATA_DIR/$_TIMESTAMP
+mkdir -p $_RESULT_DIR/$_TIMESTAMP
 cd $_DATA_DIR/
-$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_DATA_DIR/$_TIMESTAMP/load_data 2>&1
+$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_RESULT_DIR/$_TIMESTAMP/load_data 2>&1
 cd $_WORKING_DIR/
 load_result=$(python get_load_data_time.py $_DATA_DIR/$_TIMESTAMP/load_data)
 echo $load_result
