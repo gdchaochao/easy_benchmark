@@ -6,27 +6,27 @@ Created on 2019/3/13
 import re
 import sys
 import json
+from collections import defaultdict
 
 
 def get_load_data(r_file):
     total_time = 0
-    r = "{"
+    r = dict()
     table_pattern = r"Loading data to table .*\.(?P<value>[a-zA-Z\_]*)"
     time_pattern = r"Time taken: (?P<value>\d*(\.\d+)*)"
+    current_key = ""
     with open(r_file, 'r') as f:
         for line in f.readlines():
             if "Loading data to table" in line:
-                # print line.strip()
                 match = re.search(table_pattern, line.strip())
                 table = match.group("value")
-                r = r + "\"%s\":" % table
+                current_key = table
             if "Time taken" in line:
-                # print line.strip()
                 match = re.search(time_pattern, line.strip())
                 time = match.group("value")
                 total_time = total_time + float(time)
-                r = r + "%s," % time
-        r = r + "\"#tpcds_load_time\":%d}" % total_time
+                r[current_key] = time
+        r["#tpcds_load_time"] = total_time
     r = json.dumps(r)
     return r
 
