@@ -259,8 +259,8 @@ def test_new_testresult(testresult):
 
 def get_cvm_config():
     configs = defaultdict(dict)
-    cpu_pattern = r"CPU-Capacity\s:\s(?P<value>[0-9])"
-    memory_pattern = r"Memory-Capacity\s:\s(?P<value>[0-9])"
+    cpu_pattern = r"CPU-Capacity\s:\s(?P<value>[0-9]*)"
+    memory_pattern = r"Memory-Capacity\s:\s(?P<value>[0-9]*)"
     try:
         nodes_info = commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/yarn node -list -states RUNNING | awk '{print $1}'")
         for node in nodes_info.split("\n"):
@@ -280,7 +280,7 @@ def get_cvm_config():
 
 def get_host_config():
     configs = defaultdict(dict)
-    pattern = r"Total Nodes:(?P<value>[0-9])"
+    pattern = r"Total Nodes:(?P<value>[0-9]*)"
     try:
         hostname = commands.getoutput("hostname")
         configs[hostname]["cpu"] = commands.getoutput("cat /proc/cpuinfo| grep \"cpu cores\"| uniq | tr -cd 0-9")
