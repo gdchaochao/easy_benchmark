@@ -34,6 +34,10 @@ do
         _SQL_TYPE=$2
         shift
         ;;
+    --scale)
+        _DATA_SCALE=$2
+        shift
+        ;;
     --result)
         _RESULT_DIR=$2
         shift
@@ -64,6 +68,8 @@ do
         ;;
     --report)
         REPORT_TOKEN=$2
+        CORE_NUM=$3
+        MEMORY_SIZE=$4
         shift
         ;;
     *)
@@ -73,6 +79,11 @@ do
   esac
   shift
 done
+
+if [ -z "$_DATA_SCALE" ]; then
+    _DATA_SCALE=10
+fi
+echo "The size of the generated data is：$_DATA_SCALE GB"
 
 if [ -z "$_SQL_TYPE" ]; then
     _SQL_TYPE='spark-sql'
@@ -90,6 +101,17 @@ if [ -z "$_TIMESTAMP" ]; then
 fi
 echo "Timestamp:$_TIMESTAMP"
 
+if [ -n "$REPORT_TOKEN" ]; then
+    if [ -z "$CORE_NUM" ]; then
+        CORE_NUM=0
+    fi
+    if [ -z "$MEMORY_SIZE" ]; then
+        MEMORY_SIZE=0
+    fi
+    SPARK_VERSION=$($SPARK_HOME/bin/spark-shell --version)
+    HADOOP_VERSION=$(HADOOP_HOME/bin/hadoop version)
+    HIVE_VERSION=$(HIVE_HOME/bin/hive --version)
+fi
 echo "Token:$REPORT_TOKEN"
 
 # spark 相关的参数
@@ -159,5 +181,5 @@ result_yunyu=$result_yunyu"\"total\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE 10 $result_yunyu $_TIMESTAMP
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $CORE_NUM $MEMORY_SIZE $SPARK_VERSION $HADOOP_VERSION $HIVE_VERSION
 fi

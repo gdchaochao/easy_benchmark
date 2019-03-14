@@ -4,6 +4,8 @@ Created on 2019/3/13
 @author: duckzheng
 '''
 import json, urllib2, datetime, hashlib, urllib, sys
+import uuid, re
+
 
 host = "https://yunyu.cloud.tencent.com/cloud_perf_db"
 token = "Token %s" % sys.argv[1]
@@ -245,13 +247,27 @@ def test_new_testresult(testresult):
     return result
 
 
-def post_tpc_ds_result(sql_type, scale, result, core_num, memory, spark_version, hadoop_version, hive_version,
-                       timestamp):
+def filter_version(version_str):
+    pattern = r"(?P<version>\d{1,2}\.\d{1,2}\.\d{1,2})"
+    match = re.search(pattern, version_str)
+    try:
+        if match and match.group("version"):
+            return match.group("version")
+        else:
+            return '0.0'
+    except:
+        return '0.0'
+
+
+def post_tpc_ds_result(sql_type, scale, result, core_num, memory, spark_version, hadoop_version, hive_version):
     if sql_type == 'hive':
         test_name = 'cvm_tpc_ds_73_queries'
     else:
         test_name = 'cvm_tpc_ds_99_queries'
     tool_name = 'TPC-DS'
+    spark_version = filter_version(spark_version)
+    hadoop_version = filter_version(hadoop_version)
+    hive_version = filter_version(hive_version)
     cost = '{}'
     vm_conf = Config("cvm", "default", "{}", "default", "default")
     host_conf = Config("host_hadoop", "default", json.dumps({"core_num": core_num, "memory": memory,
@@ -275,7 +291,8 @@ def post_tpc_ds_result(sql_type, scale, result, core_num, memory, spark_version,
     std_through_put = 0.0
     benchmark_type = 0
     description = '待添加'
-    task_id = 'TPC-DS-' + str(timestamp)
+    # task_id = 'TPC-DS-' + str(timestamp)
+    task_id = str(uuid.uuid1()).replace("-", "")
 
     postVMTestResult(test_name, tool_name, vm_conf, host_conf, tool_conf, kvm_conf, qemu_conf, libvirt_conf,
                      cost, results_json,
@@ -290,5 +307,5 @@ print sys.argv[3]
 print sys.argv[4]
 print sys.argv[5]
 print token
-post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], 64, 256, '2.3.2', '2.7.3', '2.1.0', sys.argv[5])
+post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9])
 
