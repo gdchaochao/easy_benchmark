@@ -24,8 +24,8 @@ def get_load_data(r_file):
                 match = re.search(time_pattern, line.strip())
                 time = match.group("value")
                 total_time = total_time + float(time)
-                r = r + " %s, " % time
-        r = r + "\"#tpcds_load_time\": %d}\"" % total_time
+                r = r + "%s," % time
+        r = r + "\"#tpcds_load_time\":%d}\"" % total_time
     return r
 
 

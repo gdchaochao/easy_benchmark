@@ -37,6 +37,18 @@ dsdgen Population Generator (Version 2.10.0)
 Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
 Warning: This scale factor is valid for QUALIFICATION ONLY
 ```  
+
+### Load data to tables
+```
+sh ./tpcds_load.sh --scale 10 --data ~/tpcds/data
+```
+  
+If you see this information, please wait a moment.
+```powershell
+dsdgen Population Generator (Version 2.10.0)
+Copyright Transaction Processing Performance Council (TPC) 2001 - 2018
+Warning: This scale factor is valid for QUALIFICATION ONLY
+```  
   
 ### Run queries
 Run spark-sql queries in Background, please wait.
