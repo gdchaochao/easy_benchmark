@@ -13,6 +13,7 @@ import uuid
 import re
 import commands
 import os
+import traceback
 
 
 host = "https://yunyu.cloud.tencent.com/cloud_perf_db"
@@ -272,6 +273,7 @@ def get_cvm_config():
             configs[node]["memory"] = match_memory.group("value")
         return configs
     except:
+        print traceback.format_exc()
         return {}
 
 
@@ -288,6 +290,7 @@ def get_host_config():
         configs[hostname]["nodes"] = match.group("value")
         return configs
     except:
+        print traceback.format_exc()
         return {}
 
 
