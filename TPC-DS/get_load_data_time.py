@@ -27,7 +27,7 @@ def get_load_data(r_file):
                 total_time = total_time + float(time)
                 r[current_key] = time
         r["#tpcds_load_time"] = total_time
-    r = json.dumps(r)
+    # r = json.dumps(r)
     return r
 
 
