@@ -258,13 +258,13 @@ def test_new_testresult(testresult):
 def get_host_config():
     configs = dict()
     try:
-        nodes_info = commands.getoutput(os.getenv("YARN_HOME") + "/bin/yarn node -list -states RUNNING | awk '{print $1}'")
+        nodes_info = commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/yarn node -list -states RUNNING | awk '{print $1}'")
         for node in nodes_info.split("\n"):
             if "Total" in node or "Node-Id" in node:
                 continue
-            configs[node]["cpu"] = commands.getoutput(os.getenv("YARN_HOME")
+            configs[node]["cpu"] = commands.getoutput(os.getenv("HADOOP_HOME")
                                                       + "/bin/yarn node -status %s | grep CPU-Capacity | tr -cd 0-9" % node)
-            configs[node]["memory"] = commands.getoutput(os.getenv("YARN_HOME")
+            configs[node]["memory"] = commands.getoutput(os.getenv("HADOOP_HOME")
                                                          + "/bin/yarn node -status %s | grep Memory-Capacity | tr -cd 0-9" % node)
         return configs
     except:
@@ -276,8 +276,7 @@ def get_cvm_config():
     try:
         hostname = commands.getoutput("hostname")
         configs[hostname]["cpu"] = commands.getoutput("cat /proc/cpuinfo| grep \"cpu cores\"| uniq | tr -cd 0-9")
-        configs[hostname]["memory"] = commands.getoutput("cat /proc/meminfo | grep \"MemTotal:\"| uniq | tr -cd 0-9")
-        configs[hostname]["memory"] = commands.getoutput(os.getenv("YARN_HOME")
+        configs[hostname]["memory"] = commands.getoutput(os.getenv("HADOOP_HOME")
                                  + "/bin/yarn node -list -states RUNNING | grep \"Total Nodes\" | uniq |tr -cd 0-9")
         return configs
     except:
