@@ -32,6 +32,6 @@ def get_load_data(r_file):
 
 
 if __name__ == "__main__":
-    print get_load_data("./load_data_log")
-    # print get_load_data(sys.argv[1])
+    # print get_load_data("./load_data_log")
+    print get_load_data(sys.argv[1])
 
