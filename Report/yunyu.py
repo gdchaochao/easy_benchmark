@@ -255,29 +255,37 @@ def test_new_testresult(testresult):
     return result
 
 
-def get_host_config():
+def get_cvm_config():
     configs = dict()
+    cpu_pattern = r"CPU-Capacity\s:\s(?P<value>[0-9])"
+    memory_pattern = r"Memory-Capacity\s:\s(?P<value>[0-9])"
     try:
         nodes_info = commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/yarn node -list -states RUNNING | awk '{print $1}'")
         for node in nodes_info.split("\n"):
-            if "Total" in node or "Node-Id" in node:
+            if "Total" in node or "Node-Id" in node or "SLF4J: " in node:
                 continue
-            configs[node]["cpu"] = commands.getoutput(os.getenv("HADOOP_HOME")
-                                                      + "/bin/yarn node -status %s | grep CPU-Capacity | tr -cd 0-9" % node)
-            configs[node]["memory"] = commands.getoutput(os.getenv("HADOOP_HOME")
-                                                         + "/bin/yarn node -status %s | grep Memory-Capacity | tr -cd 0-9" % node)
+            cpu = commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/yarn node -status %s | grep CPU-Capacity" % node)
+            memory = commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/yarn node -status %s | grep Memory-Capacity" % node)
+            match_cpu = re.search(cpu_pattern, cpu)
+            match_memory = re.search(memory_pattern, memory)
+            configs[node]["cpu"] = match_cpu.group("value")
+            configs[node]["memory"] = match_memory.group("value")
         return configs
     except:
         return {}
 
 
-def get_cvm_config():
+def get_host_config():
     configs = dict()
+    pattern = r"Total Nodes:(?P<value>[0-9])"
     try:
         hostname = commands.getoutput("hostname")
         configs[hostname]["cpu"] = commands.getoutput("cat /proc/cpuinfo| grep \"cpu cores\"| uniq | tr -cd 0-9")
-        configs[hostname]["memory"] = commands.getoutput(os.getenv("HADOOP_HOME")
-                                 + "/bin/yarn node -list -states RUNNING | grep \"Total Nodes\" | uniq |tr -cd 0-9")
+        configs[hostname]["memory"] = commands.getoutput("cat /proc/meminfo | grep \"MemTotal:\"| uniq | tr -cd 0-9")
+
+        running_nodes = commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/yarn node -list -states RUNNING | grep \"Total Nodes\"")
+        match = re.search(pattern, running_nodes)
+        configs[hostname]["nodes"] = match.group("value")
         return configs
     except:
         return {}
