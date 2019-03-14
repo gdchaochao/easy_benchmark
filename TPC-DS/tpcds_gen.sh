@@ -90,7 +90,7 @@ echo "=========================================================="
 
 
 echo "=========================================================="
-echo "start create table..."
+echo "start create table and load data..."
 echo "=========================================================="
 
 # create table
@@ -103,5 +103,5 @@ $HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql
 cd $_WORKING_DIR/
 
 echo "=========================================================="
-echo "Finish create table..."
+echo "Finish create table and load data..."
 echo "=========================================================="

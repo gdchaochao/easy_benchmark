@@ -14,6 +14,7 @@ do
         --data                      Directory for storing data
         --result                    Directory for storing result
         --sql                       sql type, hive or spark-sql
+        --report                    report to yunyu, need token
 
         spark-sql only:
         --master                    spark://host:port, mesos://host:port, yarn, or local(Default: yarn).
@@ -31,6 +32,10 @@ do
         ;;
     --sql)
         _SQL_TYPE=$2
+        shift
+        ;;
+    --scale)
+        _DATA_SCALE=$2
         shift
         ;;
     --result)
@@ -59,6 +64,10 @@ do
         ;;
     --driver-memory)
         DRIVER_MEMORY=$2
+        shift
+        ;;
+    --report)
+        REPORT_TOKEN=$2
         shift
         ;;
     *)
@@ -112,7 +121,7 @@ echo "=========================================================="
 # start query
 _TIMESTAMP=$(date +%s)
 mkdir -p $_RESULT_DIR/$_TIMESTAMP
-nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --result $_RESULT_DIR --time $_TIMESTAMP > $_RESULT_DIR/$_TIMESTAMP/result 2>&1 &
+nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --result $_RESULT_DIR --time $_TIMESTAMP --report $REPORT_TOKEN --scale $_DATA_SCALE > $_RESULT_DIR/$_TIMESTAMP/result 2>&1 &
 echo "=========================================================="
 echo "Run queries in Background, please wait and check result in $_RESULT_DIR/$_TIMESTAMP/result..."
 echo "=========================================================="

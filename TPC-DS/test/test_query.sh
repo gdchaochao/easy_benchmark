@@ -14,7 +14,7 @@ do
         --data                      Directory for storing data
         --result                    Directory for storing result
         --sql                       sql type, hive or spark-sql
-        --report                    report to yunyu
+        --report                    report to yunyu, need token
 
         spark-sql only:
         --master                    spark://host:port, mesos://host:port, yarn, or local(Default: yarn).
@@ -99,7 +99,7 @@ if [ -z "$_TIMESTAMP" ]; then
 fi
 echo "Timestamp:$_TIMESTAMP"
 
-echo "Token:$REPORT_TOKEN"
+#echo "Token:$REPORT_TOKEN"
 
 # spark 相关的参数
 spark_param_str=""
@@ -147,7 +147,6 @@ do
     if [ "$_SQL_TYPE" = "hive" ];then
         cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     fi
-#    echo $cmd
     $cmd > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
     if [ -n "$time_spent" ]; then
@@ -157,14 +156,14 @@ do
     echo "cost time:$time_spent"
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
     echo ${filename/.sql/}' '$time_spent >> $result_summary
-    result_yunyu=$result_yunyu"\"${filename/.sql/}\":$time_spent,"
+    result_yunyu=$result_yunyu"\"tpcds_${filename/.sql/}\":$time_spent,"
 done
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="
 echo "total time:$total_time_spent"
 echo "total time:$total_time_spent" >> $result_summary
-result_yunyu=$result_yunyu"\"total\":$total_time_spent}"
+result_yunyu=$result_yunyu"\"tpcds_queries_time\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
