@@ -68,8 +68,6 @@ do
         ;;
     --report)
         REPORT_TOKEN=$2
-        CORE_NUM=$3
-        MEMORY_SIZE=$4
         shift
         ;;
     *)
@@ -101,17 +99,6 @@ if [ -z "$_TIMESTAMP" ]; then
 fi
 echo "Timestamp:$_TIMESTAMP"
 
-if [ -n "$REPORT_TOKEN" ]; then
-    if [ -z "$CORE_NUM" ]; then
-        CORE_NUM=0
-    fi
-    if [ -z "$MEMORY_SIZE" ]; then
-        MEMORY_SIZE=0
-    fi
-    SPARK_VERSION=$($SPARK_HOME/bin/spark-shell --version)
-    HADOOP_VERSION=$(HADOOP_HOME/bin/hadoop version)
-    HIVE_VERSION=$(HIVE_HOME/bin/hive --version)
-fi
 echo "Token:$REPORT_TOKEN"
 
 # spark 相关的参数
@@ -181,5 +168,5 @@ result_yunyu=$result_yunyu"\"total\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $CORE_NUM $MEMORY_SIZE $SPARK_VERSION $HADOOP_VERSION $HIVE_VERSION
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu
 fi

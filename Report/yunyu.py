@@ -3,8 +3,16 @@
 Created on 2019/3/13
 @author: duckzheng
 '''
-import json, urllib2, datetime, hashlib, urllib, sys
-import uuid, re
+import json
+import urllib2
+import datetime
+import hashlib
+import urllib
+import sys
+import uuid
+import re
+import commands
+import os
 
 
 host = "https://yunyu.cloud.tencent.com/cloud_perf_db"
@@ -247,6 +255,35 @@ def test_new_testresult(testresult):
     return result
 
 
+def get_host_config():
+    configs = dict()
+    try:
+        nodes_info = commands.getoutput(os.getenv("YARN_HOME") + "/bin/yarn node -list -states RUNNING | awk '{print $1}'")
+        for node in nodes_info.split("\n"):
+            if "Total" in node or "Node-Id" in node:
+                continue
+            configs[node]["cpu"] = commands.getoutput(os.getenv("YARN_HOME")
+                                                      + "/bin/yarn node -status %s | grep CPU-Capacity | tr -cd 0-9" % node)
+            configs[node]["memory"] = commands.getoutput(os.getenv("YARN_HOME")
+                                                         + "/bin/yarn node -status %s | grep Memory-Capacity | tr -cd 0-9" % node)
+        return configs
+    except:
+        return {}
+
+
+def get_cvm_config():
+    configs = dict()
+    try:
+        hostname = commands.getoutput("hostname")
+        configs[hostname]["cpu"] = commands.getoutput("cat /proc/cpuinfo| grep \"cpu cores\"| uniq | tr -cd 0-9")
+        configs[hostname]["memory"] = commands.getoutput("cat /proc/meminfo | grep \"MemTotal:\"| uniq | tr -cd 0-9")
+        configs[hostname]["memory"] = commands.getoutput(os.getenv("YARN_HOME")
+                                 + "/bin/yarn node -list -states RUNNING | grep \"Total Nodes\" | uniq |tr -cd 0-9")
+        return configs
+    except:
+        return {}
+
+
 def filter_version(version_str):
     pattern = r"(?P<version>\d{1,2}\.\d{1,2}\.\d{1,2})"
     match = re.search(pattern, version_str)
@@ -259,24 +296,24 @@ def filter_version(version_str):
         return '0.0'
 
 
-def post_tpc_ds_result(sql_type, scale, result, core_num, memory, spark_version, hadoop_version, hive_version):
+def post_tpc_ds_result(sql_type, scale, result):
     if sql_type == 'hive':
         test_name = 'cvm_tpc_ds_73_queries'
     else:
         test_name = 'cvm_tpc_ds_99_queries'
     tool_name = 'TPC-DS'
-    spark_version = filter_version(spark_version)
-    hadoop_version = filter_version(hadoop_version)
-    hive_version = filter_version(hive_version)
+    spark_version = filter_version(commands.getoutput(os.getenv("SPARK_HOME") + "/bin/spark-shell --version"))
+    hadoop_version = filter_version(commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/hadoop version"))
+    hive_version = filter_version(commands.getoutput(os.getenv("HIVE_HOME") + "/bin/hive --version"))
     cost = '{}'
-    vm_conf = Config("cvm", "default", "{}", "default", "default")
-    host_conf = Config("host_hadoop", "default", json.dumps({"core_num": core_num, "memory": memory,
-                                                             "spark": spark_version, "hadoop": hadoop_version,
-                                                             "hive": hive_version}), "default", "default")
+    vm_conf = Config("node", "default", json.dumps(get_cvm_config()), "default", "default")
+    host_conf = Config("master", "default", json.dumps(get_host_config()), "default", "default")
     kvm_conf = Config("kvm", "default", "{}", "default", "default")
     qemu_conf = Config("qemu", "default", "{}", "default", "default")
     libvirt_conf = Config("libvirt", "default", "{}", "default", "default")
-    tool_conf = Config("TPC-DS", "2.10.1rc3", json.dumps({"scale": scale}), "default", "default")
+    tool_conf = Config("TPC-DS", "2.10.1rc3",
+                       json.dumps({"scale": scale, "spark": spark_version, "hadoop": hadoop_version,
+                                   "hive": hive_version}), "default", "default")
     cost = '{}'
     results_json = result
     avg_time = 0.0
@@ -301,11 +338,11 @@ def post_tpc_ds_result(sql_type, scale, result, core_num, memory, spark_version,
                      benchmark_type, description, task_id)
 
 
-print sys.argv[1]
-print sys.argv[2]
-print sys.argv[3]
-print sys.argv[4]
-print sys.argv[5]
-print token
-post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9])
+if __name__ == "__main__":
+    print sys.argv[1]
+    print sys.argv[2]
+    print sys.argv[3]
+    print sys.argv[4]
+    print token
+    post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4])
 
