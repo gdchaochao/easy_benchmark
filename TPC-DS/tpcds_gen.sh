@@ -103,6 +103,7 @@ $HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/create_table.sql
 # load data to table
 echo "load data..."
 _TIMESTAMP=$(date +%s)
+mkdir -p $_DATA_DIR/$_TIMESTAMP
 cd $_DATA_DIR/
 $HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_DATA_DIR/$_TIMESTAMP/load_data
 cd $_WORKING_DIR/
