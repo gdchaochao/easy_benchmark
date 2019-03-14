@@ -14,6 +14,7 @@ import re
 import commands
 import os
 import traceback
+from collections import defaultdict
 
 
 host = "https://yunyu.cloud.tencent.com/cloud_perf_db"
@@ -257,7 +258,7 @@ def test_new_testresult(testresult):
 
 
 def get_cvm_config():
-    configs = dict()
+    configs = defaultdict(dict)
     cpu_pattern = r"CPU-Capacity\s:\s(?P<value>[0-9])"
     memory_pattern = r"Memory-Capacity\s:\s(?P<value>[0-9])"
     try:
@@ -278,7 +279,7 @@ def get_cvm_config():
 
 
 def get_host_config():
-    configs = dict()
+    configs = defaultdict(dict)
     pattern = r"Total Nodes:(?P<value>[0-9])"
     try:
         hostname = commands.getoutput("hostname")
