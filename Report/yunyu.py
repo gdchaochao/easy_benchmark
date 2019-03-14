@@ -310,6 +310,10 @@ def filter_version(version_str):
 def post_tpc_ds_result(sql_type, scale, result):
     if sql_type == 'hive':
         test_name = 'cvm_tpc_ds_73_queries'
+    elif sql_type == 'spark-sql':
+        test_name = 'cvm_tpc_ds_99_queries'
+    elif sql_type == 'load':
+        test_name = 'cvm_tpc_ds_load'
     else:
         test_name = 'cvm_tpc_ds_99_queries'
     tool_name = 'TPC-DS'

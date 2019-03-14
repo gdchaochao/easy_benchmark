@@ -5,11 +5,12 @@ Created on 2019/3/13
 '''
 import re
 import sys
+import json
 
 
 def get_load_data(r_file):
     total_time = 0
-    r = "\"{"
+    r = "{"
     table_pattern = r"Loading data to table .*\.(?P<value>[a-zA-Z\_]*)"
     time_pattern = r"Time taken: (?P<value>\d*(\.\d+)*)"
     with open(r_file, 'r') as f:
@@ -25,11 +26,12 @@ def get_load_data(r_file):
                 time = match.group("value")
                 total_time = total_time + float(time)
                 r = r + "%s," % time
-        r = r + "\"#tpcds_load_time\":%d}\"" % total_time
+        r = r + "\"#tpcds_load_time\":%d}" % total_time
+    r = json.dumps(r)
     return r
 
 
 if __name__ == "__main__":
-    # print get_load_data("./load_data_log")
-    print get_load_data(sys.argv[1])
+    print get_load_data("./load_data_log")
+    # print get_load_data(sys.argv[1])
 

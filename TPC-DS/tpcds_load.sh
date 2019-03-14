@@ -86,7 +86,7 @@ cd $_WORKING_DIR/
 load_result=$(python get_load_data_time.py $_RESULT_DIR/$_TIMESTAMP/load_data)
 echo $load_result
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN "spark-sql" $_DATA_SCALE $load_result
+    python ../Report/yunyu.py $REPORT_TOKEN "load" $_DATA_SCALE $load_result
 fi
 
 echo "=========================================================="

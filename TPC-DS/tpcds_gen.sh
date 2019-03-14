@@ -93,28 +93,28 @@ echo "Finish generate data..."
 echo "=========================================================="
 
 
-echo "=========================================================="
-echo "start create table and load data..."
-echo "=========================================================="
-
-# create table
-$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/create_table.sql
-
-# load data to table
-echo "=========================================================="
-echo "loading data..."
-echo "=========================================================="
-_TIMESTAMP=$(date +%s)
-mkdir -p $_RESULT_DIR/$_TIMESTAMP
-cd $_DATA_DIR/
-$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_RESULT_DIR/$_TIMESTAMP/load_data 2>&1
-cd $_WORKING_DIR/
-load_result=$(python get_load_data_time.py $_RESULT_DIR/$_TIMESTAMP/load_data)
-echo $load_result
-if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN "spark-sql" $_DATA_SCALE $load_result
-fi
-
-echo "=========================================================="
-echo "Finish create table and load data..."
-echo "=========================================================="
+#echo "=========================================================="
+#echo "start create table and load data..."
+#echo "=========================================================="
+#
+## create table
+#$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/create_table.sql
+#
+## load data to table
+#echo "=========================================================="
+#echo "loading data..."
+#echo "=========================================================="
+#_TIMESTAMP=$(date +%s)
+#mkdir -p $_RESULT_DIR/$_TIMESTAMP
+#cd $_DATA_DIR/
+#$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_RESULT_DIR/$_TIMESTAMP/load_data 2>&1
+#cd $_WORKING_DIR/
+#load_result=$(python get_load_data_time.py $_RESULT_DIR/$_TIMESTAMP/load_data)
+#echo $load_result
+#if [ -n "$REPORT_TOKEN" ]; then
+#    python ../Report/yunyu.py $REPORT_TOKEN "spark-sql" $_DATA_SCALE $load_result
+#fi
+#
+#echo "=========================================================="
+#echo "Finish create table and load data..."
+#echo "=========================================================="
