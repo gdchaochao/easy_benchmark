@@ -163,7 +163,7 @@ echo "Finish query..."
 echo "=========================================================="
 echo "total time:$total_time_spent"
 echo "total time:$total_time_spent" >> $result_summary
-result_yunyu=$result_yunyu"\"tpcds_queries_time\":$total_time_spent}"
+result_yunyu=$result_yunyu"\"#tpcds_queries_time\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then

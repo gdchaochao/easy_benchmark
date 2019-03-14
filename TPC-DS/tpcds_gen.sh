@@ -32,6 +32,10 @@ do
         _RESULT_DIR=$2
         shift
         ;;
+    --report)
+        REPORT_TOKEN=$2
+        shift
+        ;;
     *)
         echo "$1 is not an option"
         exit
@@ -98,9 +102,15 @@ $HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/create_table.sql
 
 # load data to table
 echo "load data..."
+_TIMESTAMP=$(date +%s)
 cd $_DATA_DIR/
-$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql
+$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_DATA_DIR/$_TIMESTAMP/load_data
 cd $_WORKING_DIR/
+load_result=$(python get_load_data_time.py $_DATA_DIR/$_TIMESTAMP/load_data)
+echo $load_result
+if [ -n "$REPORT_TOKEN" ]; then
+    python ../Report/yunyu.py $REPORT_TOKEN "spark-sql" $_DATA_SCALE $load_result
+fi
 
 echo "=========================================================="
 echo "Finish create table and load data..."
