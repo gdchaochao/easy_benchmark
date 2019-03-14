@@ -83,10 +83,34 @@ mkdir -p $_RESULT_DIR/$_TIMESTAMP
 cd $_DATA_DIR/
 $HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_RESULT_DIR/$_TIMESTAMP/load_data 2>&1
 cd $_WORKING_DIR/
-load_result=$(python get_load_data_time.py $_RESULT_DIR/$_TIMESTAMP/load_data)
-echo $load_result
+
+total_time_spent=0
+result_yunyu="{"
+while read line
+do
+    if [[ "$line" =~ "Loading data to table" ]]; then
+        table=${line##*Loading data to table default.}
+        echo "table:${line}"
+        result_yunyu=$result_yunyu"\"tpcds_load_$table\":"
+    fi
+    if [[ "$line" =~ "Time taken" ]]; then
+        time=${line% seconds*}
+        time=${time##*Time taken: }
+        echo "time:${line}"
+        result_yunyu=$result_yunyu$time","
+        total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time')}')
+    fi
+done < $_RESULT_DIR/$_TIMESTAMP/load_data
+result_yunyu=$result_yunyu"\"#tpcds_load_time\":$total_time_spent}"
+echo $result_yunyu
+echo $total_time_spent
+
+#load_result=$(python get_load_data_time.py $_RESULT_DIR/$_TIMESTAMP/load_data)
+
+
+echo $result_yunyu
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN "load" $_DATA_SCALE $load_result
+    python ../Report/yunyu.py $REPORT_TOKEN "load" $_DATA_SCALE $result_yunyu
 fi
 
 echo "=========================================================="
