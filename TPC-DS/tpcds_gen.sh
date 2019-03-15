@@ -77,7 +77,7 @@ _TPCDS_DIR=$_WORKING_DIR/tpcds
 echo $_TPCDS_DIR
 unzip -o ./resource/v2.10.1rc3.zip
 mv $_WORKING_DIR/v2.10.1rc3 $_WORKING_DIR/tpcds
-rm -rf $_WORKING_DIR/__MACOSX
+#rm -rf $_WORKING_DIR/__MACOSX
 
 # make tpc-ds
 echo "make"

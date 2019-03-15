@@ -81,7 +81,7 @@ echo "=========================================================="
 _TIMESTAMP=$(date +%s)
 mkdir -p $_RESULT_DIR/$_TIMESTAMP
 cd $_DATA_DIR/
-$HIVE_HOME/bin/hive -f $_WORKING_DIR/resource/load_data.sql > $_RESULT_DIR/$_TIMESTAMP/load_data 2>&1
+$SPARK_HOME/bin/spark-sql -f $_WORKING_DIR/resource/load_data.sql > $_RESULT_DIR/$_TIMESTAMP/load_data 2>&1
 cd $_WORKING_DIR/
 
 total_time_spent=0

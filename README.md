@@ -26,9 +26,9 @@ cd ./easy_benchmark/TPC-DS
 ```  
   
 ### Generate data
-Generate data and create tables, "--scale" indicates how big the generated data is (GB).
+Generate data and create tables, "--scale" indicates how big the generated data is.
 ```
-sh ./tpcds_gen.sh --scale 10 --data ~/tpcds/data
+sh ./tpcds_gen.sh --scale 10GB --data ~/tpcds/data
 ```
   
 If you see this information, please wait a moment.
