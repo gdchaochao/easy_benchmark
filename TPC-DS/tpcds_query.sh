@@ -156,7 +156,7 @@ do
     echo "cost time:$time_spent"
     total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
     echo ${filename/.sql/}' '$time_spent >> $result_summary
-    result_yunyu=$result_yunyu"\"tpcds_${filename/.sql/}\":$time_spent,"
+    result_yunyu=$result_yunyu"\"#tpcds_${filename/.sql/}\":$time_spent,"
 done
 echo "=========================================================="
 echo "Finish query..."

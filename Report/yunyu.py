@@ -128,7 +128,7 @@ def postVMTestResult(test_name, tool_name, vm_conf, host_conf, tool_conf, kvm_co
     is_cold_boot = 'True'
 
     testresult = {
-        "timestamp": datetime.datetime.now().strftime('%Y-%m-%d'),
+        "timestamp": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         "version": version,
         "costs_json": cost,
         "results_json": results_json,
