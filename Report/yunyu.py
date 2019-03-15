@@ -316,21 +316,25 @@ def post_tpc_ds_result(sql_type, scale, result):
     spark_version = filter_version(commands.getoutput(os.getenv("SPARK_HOME") + "/bin/spark-shell --version"))
     hadoop_version = filter_version(commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/hadoop version"))
     hive_version = filter_version(commands.getoutput(os.getenv("HIVE_HOME") + "/bin/hive --version"))
+    # spark_version = "2.2.2"
+    # hadoop_version = "2.1"
+    # hive_version = "2.3"
     cost = '{}'
 
     master_conf = Config("cvm", "default", master_config, "default", "default")
     node_conf = Config("cvm", "default", node_config, "default", "default")
     cluster_dir = {
         "master": [{
-                "config_id": master_conf,
+                "config_id": __find_and_new_config(master_conf),
                 "number": 1
         }],
         "nodes": [{
-                "config_id": node_conf,
+                "config_id": __find_and_new_config(node_conf),
                 "number": 6
         }]
     }
-    cluster_conf = Config("cluster", "default", json.dumps(cluster_dir), "default", "default")
+    cluster_dir = json.dumps(cluster_dir)
+    cluster_conf = Config("cluster", "default", cluster_dir, "default", "default")
     tool_conf = Config("TPC-DS", "2.10.1rc3",
                        json.dumps({"scale": scale, "spark": spark_version, "hadoop": hadoop_version,
                                    "hive": hive_version}), "default", "default")
@@ -364,4 +368,5 @@ if __name__ == "__main__":
     print sys.argv[4]
     print token
     post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4])
+
 
