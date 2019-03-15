@@ -86,7 +86,7 @@ make clean all
 
 echo "dsdgen data"
 chmod +x $_TPCDS_DIR/tools/dsdgen
-$_TPCDS_DIR/tools/dsdgen -SCALE 1GB -DIR $_DATA_DIR
+$_TPCDS_DIR/tools/dsdgen -SCALE $_DATA_SCALE -DIR $_DATA_DIR
 
 echo "=========================================================="
 echo "Finish generate data..."
