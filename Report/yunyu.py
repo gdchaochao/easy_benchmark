@@ -121,7 +121,7 @@ def postVMTestResult(test_name, tool_name, tool_conf, cluster_conf,
     is_cold_boot = 'True'
 
     testresult = {
-        "timestamp": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        "timestamp": datetime.datetime.now().strftime('%Y-%m-%d'),
         "version": version,
         "costs_json": cost,
         "results_json": results_json,
@@ -321,14 +321,14 @@ def post_tpc_ds_result(sql_type, scale, result):
     master_conf = Config("cvm", "default", json.dumps(master_config), "default", "default")
     node_conf = Config("cvm", "default", json.dumps(node_config), "default", "default")
     cluster_dir = {
-        "master": [{
+        "master": {
                 "config_id": __find_and_new_config(master_conf),
                 "number": 1
-        }],
-        "nodes": [{
+        },
+        "nodes": {
                 "config_id": __find_and_new_config(node_conf),
                 "number": 6
-        }]
+        }
     }
     cluster_conf = Config("cluster", "default", json.dumps(cluster_dir), "default", "default")
     tool_conf = Config("TPC-DS", "2.10.1rc3",
