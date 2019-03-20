@@ -121,7 +121,7 @@ def postVMTestResult(test_name, tool_name, tool_conf, cluster_conf,
     is_cold_boot = 'True'
 
     testresult = {
-        "timestamp": datetime.datetime.now().strftime('%Y-%m-%d'),
+        "timestamp": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         "version": version,
         "costs_json": cost,
         "results_json": results_json,
@@ -300,7 +300,8 @@ def filter_version(version_str):
         return '0.0'
 
 
-def post_tpc_ds_result(sql_type, scale, result):
+def post_tpc_ds_result(sql_type, scale, result, master='', num_executors=-1, executor_cores=-1,
+                       executor_memory=-1, driver_memory=-1):
     if sql_type == 'hive':
         test_name = 'cvm_tpc_ds_73_queries'
     elif sql_type == 'spark-sql':
@@ -310,12 +311,12 @@ def post_tpc_ds_result(sql_type, scale, result):
     else:
         test_name = 'cvm_tpc_ds_99_queries'
     tool_name = 'TPC-DS'
-    # spark_version = filter_version(commands.getoutput(os.getenv("SPARK_HOME") + "/bin/spark-shell --version"))
-    # hadoop_version = filter_version(commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/hadoop version"))
-    # hive_version = filter_version(commands.getoutput(os.getenv("HIVE_HOME") + "/bin/hive --version"))
-    spark_version = "2.2.2"
-    hadoop_version = "2.1"
-    hive_version = "2.3"
+    spark_version = filter_version(commands.getoutput(os.getenv("SPARK_HOME") + "/bin/spark-shell --version"))
+    hadoop_version = filter_version(commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/hadoop version"))
+    hive_version = filter_version(commands.getoutput(os.getenv("HIVE_HOME") + "/bin/hive --version"))
+    # spark_version = "2.2.2"
+    # hadoop_version = "2.1"
+    # hive_version = "2.3"
     cost = '{}'
 
     master_conf = Config("cvm", "default", json.dumps(master_config), "default", "default")
@@ -331,9 +332,19 @@ def post_tpc_ds_result(sql_type, scale, result):
         }
     }
     cluster_conf = Config("cluster", "default", json.dumps(cluster_dir), "default", "default")
+    tool_dir = {
+        "scale": scale,
+        "spark": spark_version,
+        "hadoop": hadoop_version,
+        "hive": hive_version,
+        "master": master,
+        "num_executors": num_executors,
+        "executor_memory": executor_memory,
+        "executor_cores": executor_cores,
+        "driver_memory": driver_memory
+    }
     tool_conf = Config("TPC-DS", "2.10.1rc3",
-                       json.dumps({"scale": scale, "spark": spark_version, "hadoop": hadoop_version,
-                                   "hive": hive_version}), "default", "default")
+                       json.dumps(tool_dir), "default", "default")
     cost = '{}'
     results_json = result
     avg_time = 0.0
@@ -362,7 +373,13 @@ if __name__ == "__main__":
     print sys.argv[2]
     print sys.argv[3]
     print sys.argv[4]
+    print sys.argv[5]
+    print sys.argv[6]
+    print sys.argv[7]
+    print sys.argv[8]
+    print sys.argv[9]
     print token
-    post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4])
+    post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7],
+                       sys.argv[8], sys.argv[8])
 
 

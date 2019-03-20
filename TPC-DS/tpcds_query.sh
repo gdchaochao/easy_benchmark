@@ -167,5 +167,5 @@ result_yunyu=$result_yunyu"\"#tpcds_queries_time\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $MASTER_URL $EXECUTORS_NUM $EXECUTOR_CORES $EXECUTOR_MEMORY $DRIVER_MEMORY
 fi
