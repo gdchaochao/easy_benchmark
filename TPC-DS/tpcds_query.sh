@@ -176,9 +176,9 @@ then
 else
     result_file=$_RESULT_DIR/$_TIMESTAMP/${_SQL/.sql/}
     echo "Executing $_SQL now, please wait a moment"
-    cmd="$SPARK_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+    cmd="$SPARK_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$_SQL -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     if [ "$_SQL_TYPE" = "hive" ];then
-       cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+       cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$_SQL -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     fi
     $cmd > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
@@ -188,7 +188,7 @@ else
     fi
     echo "cost time:$time_spent"
     echo ${filename/.sql/}' '$time_spent >> $result_summary
-    result_yunyu=$result_yunyu"\"#tpcds_${filename/.sql/}\":$time_spent}"
+    result_yunyu=$result_yunyu"\"#tpcds_${_SQL/.sql/}\":$time_spent}"
 fi
 
 echo "=========================================================="
