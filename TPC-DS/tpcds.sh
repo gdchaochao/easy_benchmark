@@ -31,6 +31,10 @@ do
         exit
         ;;
     --sql)
+        _SQL=$2
+        shift
+        ;;
+    --sql-type)
         _SQL_TYPE=$2
         shift
         ;;
@@ -78,6 +82,11 @@ do
   shift
 done
 
+if [ -z "$_SQL" ]; then
+    _SQL='all'
+fi
+echo "SQL is：$_SQL"
+
 if [ -z "$_SQL_TYPE" ]; then
     _SQL_TYPE='spark-sql'
 fi
@@ -121,7 +130,7 @@ echo "=========================================================="
 # start query
 _TIMESTAMP=$(date +%s)
 mkdir -p $_RESULT_DIR/$_TIMESTAMP
-nohup sh $_WORKING_DIR/tpcds_query.sh --sql $_SQL_TYPE --result $_RESULT_DIR --time $_TIMESTAMP --report $REPORT_TOKEN --scale $_DATA_SCALE > $_RESULT_DIR/$_TIMESTAMP/result 2>&1 &
+nohup sh $_WORKING_DIR/tpcds_query.sh --sql-type $_SQL_TYPE --sql $_SQL --result $_RESULT_DIR --time $_TIMESTAMP --report $REPORT_TOKEN --scale $_DATA_SCALE $spark_param_str > $_RESULT_DIR/$_TIMESTAMP/result 2>&1 &
 echo "=========================================================="
 echo "Run queries in Background, please wait and check result in $_RESULT_DIR/$_TIMESTAMP/result..."
 echo "=========================================================="

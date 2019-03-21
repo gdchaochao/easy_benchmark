@@ -31,6 +31,10 @@ do
         exit
         ;;
     --sql)
+        _SQL=$2
+        shift
+        ;;
+    --sql-type)
         _SQL_TYPE=$2
         shift
         ;;
@@ -82,6 +86,11 @@ if [ -z "$_DATA_SCALE" ]; then
     _DATA_SCALE=10
 fi
 echo "The size of the generated data is：$_DATA_SCALE GB"
+
+if [ -z "$_SQL" ]; then
+    _SQL='all'
+fi
+echo "SQL is：$_SQL"
 
 if [ -z "$_SQL_TYPE" ]; then
     _SQL_TYPE='spark-sql'
@@ -139,13 +148,37 @@ if [ "$_SQL_TYPE" = "hive" ];then
     echo 'oh,use hive queries'
     files=$(ls $_WORKING_DIR/resource/queries-hive)
 fi
-for filename in $files
-do
-    result_file=$_RESULT_DIR/$_TIMESTAMP/${filename/.sql/}
-    echo "Executing $filename now, please wait a moment"
+
+if [ "$_SQL" = "all" ]
+then
+    for filename in $files
+    do
+        result_file=$_RESULT_DIR/$_TIMESTAMP/${filename/.sql/}
+        echo "Executing $filename now, please wait a moment"
+        cmd="$SPARK_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+        if [ "$_SQL_TYPE" = "hive" ];then
+            cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+        fi
+        $cmd > $result_file 2>&1
+        time_spent=$(cat $result_file | grep 'Time taken')
+        if [ -n "$time_spent" ]; then
+            time_spent=${time_spent% seconds*}
+            time_spent=${time_spent##*taken: }
+        fi
+        echo "cost time:$time_spent"
+        total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
+        echo ${filename/.sql/}' '$time_spent >> $result_summary
+        result_yunyu=$result_yunyu"\"#tpcds_${filename/.sql/}\":$time_spent,"
+    done
+    echo "total time:$total_time_spent"
+    echo "total time:$total_time_spent" >> $result_summary
+    result_yunyu=$result_yunyu"\"#tpcds_queries_time\":$total_time_spent}"
+else
+    result_file=$_RESULT_DIR/$_TIMESTAMP/${_SQL/.sql/}
+    echo "Executing $_SQL now, please wait a moment"
     cmd="$SPARK_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     if [ "$_SQL_TYPE" = "hive" ];then
-        cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
+       cmd="$HIVE_HOME/bin/$_SQL_TYPE -f $_WORKING_DIR/resource/queries/$filename -i $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql" $spark_param_str"
     fi
     $cmd > $result_file 2>&1
     time_spent=$(cat $result_file | grep 'Time taken')
@@ -154,18 +187,15 @@ do
         time_spent=${time_spent##*taken: }
     fi
     echo "cost time:$time_spent"
-    total_time_spent=$(awk 'BEGIN{printf "%.2f\n",('$total_time_spent'+'$time_spent')}')
     echo ${filename/.sql/}' '$time_spent >> $result_summary
-    result_yunyu=$result_yunyu"\"#tpcds_${filename/.sql/}\":$time_spent,"
-done
+    result_yunyu=$result_yunyu"\"#tpcds_${filename/.sql/}\":$time_spent}"
+fi
+
 echo "=========================================================="
 echo "Finish query..."
 echo "=========================================================="
-echo "total time:$total_time_spent"
-echo "total time:$total_time_spent" >> $result_summary
-result_yunyu=$result_yunyu"\"#tpcds_queries_time\":$total_time_spent}"
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $MASTER_URL $EXECUTORS_NUM $EXECUTOR_CORES $EXECUTOR_MEMORY $DRIVER_MEMORY
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $MASTER_URL $EXECUTORS_NUM $EXECUTOR_CORES $EXECUTOR_MEMORY $DRIVER_MEMORY $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql"
 fi

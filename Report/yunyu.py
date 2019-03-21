@@ -301,7 +301,7 @@ def filter_version(version_str):
 
 
 def post_tpc_ds_result(sql_type, scale, result, master='', num_executors=-1, executor_cores=-1,
-                       executor_memory=-1, driver_memory=-1):
+                       executor_memory=-1, driver_memory=-1, prepare_file_path=""):
     if sql_type == 'hive':
         test_name = 'cvm_tpc_ds_73_queries'
     elif sql_type == 'spark-sql':
@@ -378,8 +378,9 @@ if __name__ == "__main__":
     print sys.argv[7]
     print sys.argv[8]
     print sys.argv[9]
+    print sys.argv[10]
     print token
     post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7],
-                       sys.argv[8], sys.argv[8])
+                       sys.argv[8], sys.argv[9], sys.argv[10])
 
 
