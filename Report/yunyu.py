@@ -16,7 +16,6 @@ import os
 import traceback
 from collections import defaultdict
 
-
 host = "https://yunyu.cloud.tencent.com/cloud_perf_db"
 token = "Token %s" % sys.argv[1]
 
@@ -31,12 +30,11 @@ testcase_data = """
                 }
                 """
 
+# fake数据
 master_config = {"os_kernel": {"kernel": "3.10.0-693.el7.x86_64", "os_name": "CentOS Linux release 7.4.1708 (Core)"}, "vendor": {"name": "qcloud"}, "bios": {"Vendor": "SeaBIOS", "Characteristics": "", "Runtime Size": "96 kB", "BIOS Revision": "0.0", "Version": "seabios-1.9.1-qemu-project.org", "ROM Size": "64 kB", "Address": "0xE8000", "Targeted content d": "istribution", "Release Date": "04/01/2014"}, "nic": {"firmware-version": "", "rfs": "0\\n0", "rps": "00", "supports-eeprom-access": "no", "supports-priv-flags": "no", "bus-info": ".0", "supports-register-dump": "no", "supports-test": "no", "expansion-rom-version": "", "version": "1.0.0", "xps": "00", "queue_num": "8", "supports-statistics": "no", "Ethernet controller": "Red Hat", "Inc Virtio network devicedriver": "virtio_net"}, "cpu_freq_info": {"available cpufreq governors": "Not Available", "consistency": "y"}, "sold_type": "D2", "gpu": {}, "xml_config": {"placement": "static", "name": "hypervisor", "cpuset": "2-1942-59'", "threads": "1", "policy": "require", "cores": "8", "fallback": "forbid", "sockets": "1"}, "disk": {}, "cuDNN": {}, "cuda": {"version": "default"}, "memory": {"Maximum Capacity": "32 GB", "Number Of Devices": "2", "Use": "System Memory", "Error Information Handle": "Not Provided", "Error Correction Type": "Multi-bit ECC", "Location": "Other"}, "nic_switch": {"tx-udp_tnl-csum-segmentation": "off fixed]", "vlan-challenged": "off fixed]", "rx-vlan-offload": "off fixed]", "tx-vlan-stag-hw-insert": "off fixed]", "rx-vlan-stag-filter": "off fixed]", "highdma": "on fixed]", "tx-tcp-segmentation": "off fixed]", "tx-nocache-copy": "off", "tx-gso-robust": "off fixed]", "tx-tcp6-segmentation": "off fixed]", "netns-local": "off fixed]", "tx-checksum-ipv4": "off fixed]", "Features for eth0": "", "tx-checksum-ip-generic": "off fixed]", "l2-fwd-offload": "off fixed]", "ntuple-filters": "off fixed]", "tx-checksum-ipv6": "off fixed]", "loopback": "off fixed]", "tx-mpls-segmentation": "off fixed]", "tx-ipip-segmentation": "off fixed]", "tx-udp_tnl-segmentation": "off fixed]", "tx-gre-segmentation": "off fixed]", "fcoe-mtu": "off fixed]", "tx-sctp-segmentation": "off fixed]", "rx-vlan-stag-hw-parse": "off fixed]", "tx-vlan-offload": "off fixed]", "tx-checksum-sctp": "off fixed]", "udp-fragmentation-offload": "off fixed]", "tx-scatter-gather-fraglist": "off fixed]", "tx-scatter-gather": "off fixed]", "tx-sit-segmentation": "off fixed]", "busy-poll": "off fixed]", "tx-checksum-fcoe-crc": "off fixed]", "generic-receive-offload": "on", "tx-tcp-mangleid-segmentation": "off fixed]", "rx-all": "off fixed]", "tcp-segmentation-offload": "off", "tx-tcp-ecn-segmentation": "off fixed]", "rx-checksumming": "on fixed]", "tx-lockless": "off fixed]", "generic-segmentation-offload": "off requested on]", "tx-fcoe-segmentation": "off fixed]", "tx-checksumming": "off", "large-receive-offload": "off fixed]", "rx-vlan-filter": "on fixed]", "tx-gre-csum-segmentation": "off fixed]", "tx-gso-partial": "off fixed]", "receive-hashing": "off fixed]", "rx-fcs": "off fixed]", "scatter-gather": "off", "hw-tc-offload": "off fixed]"}, "runtime_env": {"libc": "ldd (GNU libc) 2.17", "gcc": "gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-28)"}, "cpu": {"CPU(s)": "8", "L1d cache": "32K", "CPU op-mode(s)": "32-bit 64-bit", "NUMA node0 CPU(s)": "0-7", "Hypervisor vendor": "KVM", "L2 cache": "4096K", "L1i cache": "32K", "Model name": "Intel(R) Xeon(R) Gold 61xx CPU", "CPU MHz": "2399.998", "Core(s) per socket": "8", "Virtualization type": "full", "Thread(s) per core": "1", "model name": "Intel(R) Xeon(R) Gold 61xx CPU", "On-line CPU(s) list": "0-7", "Socket(s)": "1", "Flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch fsgsbase bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 arat", "Architecture": "x86_64", "Model": "94", "Vendor ID": "GenuineIntel", "CPU family": "6", "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch fsgsbase bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 arat", "Stepping": "3", "Byte Order": "Little Endian", "NUMA node(s)": "1"}}
-
-
 node_config = {"os_kernel": {"kernel": "3.10.0-693.el7.x86_64", "os_name": "CentOS Linux release 7.4.1708 (Core)"}, "vendor": {"name": "qcloud"}, "bios": {"Vendor": "SeaBIOS", "Characteristics": "", "Runtime Size": "96 kB", "BIOS Revision": "0.0", "Version": "seabios-1.9.1-qemu-project.org", "ROM Size": "64 kB", "Address": "0xE8000", "Targeted content d": "istribution", "Release Date": "04/01/2014"}, "nic": {"firmware-version": "", "rfs": "32768\\n4096", "rps": "ffffffff", "supports-eeprom-access": "no", "supports-priv-flags": "no", "bus-info": ".0", "supports-register-dump": "no", "supports-test": "no", "expansion-rom-version": "", "version": "1.0.0", "xps": "00000000", "queue_num": "8", "supports-statistics": "no", "Ethernet controller": "Red Hat", "Inc Virtio network devicedriver": "virtio_net"}, "cpu_freq_info": {"available cpufreq governors": "Not Available", "consistency": "y"}, "sold_type": "D2", "gpu": {}, "xml_config": {"placement": "static", "name": "hypervisor", "cpuset": "2-1942-59'", "threads": "1", "policy": "require", "cores": "32", "fallback": "forbid", "sockets": "1"}, "disk": {}, "cuDNN": {}, "cuda": {"version": "default"}, "memory": {"Maximum Capacity": "128 GB", "Number Of Devices": "8", "Use": "System Memory", "Error Information Handle": "Not Provided", "Error Correction Type": "Multi-bit ECC", "Location": "Other"}, "nic_switch": {"tx-udp_tnl-csum-segmentation": "off fixed]", "vlan-challenged": "off fixed]", "rx-vlan-offload": "off fixed]", "tx-vlan-stag-hw-insert": "off fixed]", "rx-vlan-stag-filter": "off fixed]", "highdma": "on fixed]", "tx-tcp-segmentation": "off fixed]", "tx-nocache-copy": "off", "tx-gso-robust": "off fixed]", "tx-tcp6-segmentation": "off fixed]", "netns-local": "off fixed]", "tx-checksum-ipv4": "off fixed]", "Features for eth0": "", "tx-checksum-ip-generic": "off fixed]", "l2-fwd-offload": "off fixed]", "ntuple-filters": "off fixed]", "tx-checksum-ipv6": "off fixed]", "loopback": "off fixed]", "tx-mpls-segmentation": "off fixed]", "tx-ipip-segmentation": "off fixed]", "tx-udp_tnl-segmentation": "off fixed]", "tx-gre-segmentation": "off fixed]", "fcoe-mtu": "off fixed]", "tx-sctp-segmentation": "off fixed]", "rx-vlan-stag-hw-parse": "off fixed]", "tx-vlan-offload": "off fixed]", "tx-checksum-sctp": "off fixed]", "udp-fragmentation-offload": "off fixed]", "tx-scatter-gather-fraglist": "off fixed]", "tx-scatter-gather": "off fixed]", "tx-sit-segmentation": "off fixed]", "busy-poll": "off fixed]", "tx-checksum-fcoe-crc": "off fixed]", "generic-receive-offload": "on", "tx-tcp-mangleid-segmentation": "off fixed]", "rx-all": "off fixed]", "tcp-segmentation-offload": "off", "tx-tcp-ecn-segmentation": "off fixed]", "rx-checksumming": "on fixed]", "tx-lockless": "off fixed]", "generic-segmentation-offload": "off requested on]", "tx-fcoe-segmentation": "off fixed]", "tx-checksumming": "off", "large-receive-offload": "off fixed]", "rx-vlan-filter": "on fixed]", "tx-gre-csum-segmentation": "off fixed]", "tx-gso-partial": "off fixed]", "receive-hashing": "off fixed]", "rx-fcs": "off fixed]", "scatter-gather": "off", "hw-tc-offload": "off fixed]"}, "runtime_env": {"libc": "ldd (GNU libc) 2.17", "gcc": "gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-28)"}, "cpu": {"CPU(s)": "32", "L1d cache": "32K", "CPU op-mode(s)": "32-bit 64-bit", "NUMA node0 CPU(s)": "0-31", "Hypervisor vendor": "KVM", "L2 cache": "4096K", "L1i cache": "32K", "Model name": "Intel(R) Xeon(R) Gold 61xx CPU", "CPU MHz": "2399.998", "Core(s) per socket": "32", "Virtualization type": "full", "Thread(s) per core": "1", "model name": "Intel(R) Xeon(R) Gold 61xx CPU", "On-line CPU(s) list": "0-31", "Socket(s)": "1", "Flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch fsgsbase bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 arat", "Architecture": "x86_64", "Model": "94", "Vendor ID": "GenuineIntel", "CPU family": "6", "flags": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch fsgsbase bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx avx512f avx512dq rdseed adx smap avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 arat", "Stepping": "3", "Byte Order": "Little Endian", "NUMA node(s)": "1"}}
-
 cost_default = {"Master_0": {"process": {"[ready]": {"mem%": 1.9, "cpu%": 27.5}, "[airflow]": {"mem%": 0.0, "cpu%": 8.0}}, "cost": {"max_soft_cpu_percent": "0", "cpu_freq": [0, 0, 0, 0], "max_cpu_percent": "0", "numa_miss": 0, "irq_delta": {"irq": 0, "soft": 7172}, "max_mem_usage": "0", "max_vhost_cpu_percent": "0"}, "power": {"mem": {"engergy": 0.0, "avg_power": 0.0}, "cpu": {"engergy": 0.0, "avg_power": 0.0}}}, "Slaver_0": {"process": {"/usr/local/sa/agent/plugins/sap1004": {"mem%": 2.4, "cpu%": 5.8}}, "cost": {"max_soft_cpu_percent": "1.02", "cpu_freq": [0, 0, 0, 0], "max_cpu_percent": "0", "numa_miss": 0, "irq_delta": {"irq": 0, "soft": 2011}, "max_mem_usage": "0", "max_vhost_cpu_percent": "0"}, "power": {"mem": {"engergy": 0.0, "avg_power": 0.0}, "cpu": {"engergy": 0.0, "avg_power": 0.0}}}}
+
 
 class Config(object):
     def __init__(self, name, version, configs, gcc_version, gcc_flags):
@@ -301,25 +299,42 @@ def filter_version(version_str):
         return '0.0'
 
 
-def post_tpc_ds_result(sql_type, scale, result, master='', num_executors=-1, executor_cores=-1,
-                       executor_memory=-1, driver_memory=-1, prepare_file_path=""):
-    if sql_type == 'hive':
+def post_tpc_ds_result(test_type, scale, result, master='', num_executors=-1, executor_cores=-1,
+                       executor_memory=-1, driver_memory=-1, parallelism=2000, perf_cost=cost_default,
+                       tool_name='TPC-DS'):
+    """
+    :param test_type: 测试类型hive查询测试、spark查询测试，load数据速度测试
+    :param scale: 数据规模
+    :param result: 测试结果。格式：{"query1": 12.32, "query2": 14.23}
+    :param master: 运行参数
+    :param num_executors: 运行参数
+    :param executor_cores: 运行参数
+    :param executor_memory: 运行参数
+    :param driver_memory: 运行参数
+    :param parallelism: 运行参数，并行度
+    :param perf_cost: 测试消耗的机器性能。格式：{"Master_0": ×××, "Slaver_0": ×××, "Slaver_1": ×××}
+    :param tool_name: 工具名称。现在暂时是TPC-DS和TPCx-BB
+    :return: 无返回
+    """
+    if test_type == 'hive':
         test_name = 'cvm_tpc_ds_73_queries'
-    elif sql_type == 'spark-sql':
+    elif test_type == 'spark-sql':
         test_name = 'cvm_tpc_ds_99_queries'
-    elif sql_type == 'load':
+    elif test_type == 'load':
         test_name = 'cvm_tpc_ds_load'
     else:
         test_name = 'cvm_tpc_ds_99_queries'
-    tool_name = 'TPC-DS'
+
+    tool_name = tool_name
+
     spark_version = filter_version(commands.getoutput(os.getenv("SPARK_HOME") + "/bin/spark-shell --version"))
     hadoop_version = filter_version(commands.getoutput(os.getenv("HADOOP_HOME") + "/bin/hadoop version"))
     hive_version = filter_version(commands.getoutput(os.getenv("HIVE_HOME") + "/bin/hive --version"))
     # spark_version = "2.2.2"
     # hadoop_version = "2.1"
     # hive_version = "2.3"
-    cost = json.dumps(cost_default)
 
+    # 获取集群的配置信息，这里暂时还是fake数据。TODO 需要自动获取集群的配置
     master_conf = Config("cvm", "default", json.dumps(master_config), "default", "default")
     node_conf = Config("cvm", "default", json.dumps(node_config), "default", "default")
     cluster_dir = {
@@ -333,6 +348,8 @@ def post_tpc_ds_result(sql_type, scale, result, master='', num_executors=-1, exe
         }
     }
     cluster_conf = Config("cluster", "default", json.dumps(cluster_dir), "default", "default")
+
+    # 工具运行相关的参数
     tool_dir = {
         "scale": scale,
         "spark": spark_version,
@@ -342,11 +359,17 @@ def post_tpc_ds_result(sql_type, scale, result, master='', num_executors=-1, exe
         "num_executors": num_executors,
         "executor_memory": executor_memory,
         "executor_cores": executor_cores,
-        "driver_memory": driver_memory
+        "driver_memory": driver_memory,
+        "parallelism": parallelism
     }
     tool_conf = Config("TPC-DS", "2.10.1rc3",
                        json.dumps(tool_dir), "default", "default")
-    cost = '{}'
+
+    # 性能消耗
+    # cost = '{}'
+    cost = json.dumps(perf_cost)
+
+    # 结果，TPC-DS主要是耗时
     results_json = result
     avg_time = 0.0
     min_time = 0.0
@@ -359,6 +382,7 @@ def post_tpc_ds_result(sql_type, scale, result, master='', num_executors=-1, exe
     median_through_put = 0.0
     std_through_put = 0.0
     benchmark_type = 0
+
     description = '待添加'
     task_id = str(uuid.uuid1()).replace("-", "")
 
