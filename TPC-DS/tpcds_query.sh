@@ -197,5 +197,5 @@ echo "=========================================================="
 echo $result_yunyu
 
 if [ -n "$REPORT_TOKEN" ]; then
-    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $MASTER_URL $EXECUTORS_NUM $EXECUTOR_CORES $EXECUTOR_MEMORY $DRIVER_MEMORY $_WORKING_DIR/resource/$_SQL_TYPE"-prepare.sql"
+    python ../Report/yunyu.py $REPORT_TOKEN $_SQL_TYPE $_DATA_SCALE $result_yunyu $MASTER_URL $EXECUTORS_NUM $EXECUTOR_CORES $EXECUTOR_MEMORY $DRIVER_MEMORY
 fi

@@ -249,7 +249,7 @@ def test_new_testresult(testresult):
     return result
 
 
-def get_cvm_config():
+def get_nodes_config():
     configs = defaultdict(dict)
     cpu_pattern = r"CPU-Capacity\s:\s(?P<value>[0-9]*)"
     memory_pattern = r"Memory-Capacity\s:\s(?P<value>[0-9]*)"
@@ -299,9 +299,9 @@ def filter_version(version_str):
         return '0.0'
 
 
-def post_tpc_ds_result(test_type, scale, result, master='', num_executors=-1, executor_cores=-1,
-                       executor_memory=-1, driver_memory=-1, parallelism=2000, perf_cost=cost_default,
-                       tool_name='TPC-DS'):
+def post_tpc_result(test_type, scale, result, master='yarn', num_executors=-1, executor_cores=-1, executor_memory=-1,
+                    driver_memory=-1, parallelism=2000, perf_cost=cost_default, tool_name='TPC-DS',
+                    data_platform='sparkling'):
     """
     :param test_type: 测试类型hive查询测试、spark查询测试，load数据速度测试
     :param scale: 数据规模
@@ -314,6 +314,7 @@ def post_tpc_ds_result(test_type, scale, result, master='', num_executors=-1, ex
     :param parallelism: 运行参数，并行度
     :param perf_cost: 测试消耗的机器性能。格式：{"Master_0": ×××, "Slaver_0": ×××, "Slaver_1": ×××}
     :param tool_name: 工具名称。现在暂时是TPC-DS和TPCx-BB
+    :param data_platform: sparkling或者emr。
     :return: 无返回
     """
     if test_type == 'hive':
@@ -360,7 +361,8 @@ def post_tpc_ds_result(test_type, scale, result, master='', num_executors=-1, ex
         "executor_memory": executor_memory,
         "executor_cores": executor_cores,
         "driver_memory": driver_memory,
-        "parallelism": parallelism
+        "parallelism": parallelism,
+        "data_platform": data_platform
     }
     tool_conf = Config("TPC-DS", "2.10.1rc3",
                        json.dumps(tool_dir), "default", "default")
@@ -403,9 +405,8 @@ if __name__ == "__main__":
     print sys.argv[7]
     print sys.argv[8]
     print sys.argv[9]
-    print sys.argv[10]
     print token
-    post_tpc_ds_result(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7],
-                       sys.argv[8], sys.argv[9], sys.argv[10])
+    post_tpc_result(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8],
+                    sys.argv[9])
 
 
